@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Financial;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="transaction_types")
- * @ORM\Entity(repositoryClass="App\Repository\TypeOfTransactionRepository")
+ * @ORM\Table(name="account_types")
+ * @ORM\Entity(repositoryClass="App\Repository\Financial\TypeOfAccountRepository")
  */
-class TypeOfTransaction
+class TypeOfAccount
 {
     /**
      * @ORM\Column(type="integer")
@@ -40,9 +40,9 @@ class TypeOfTransaction
 
     /**
      * @param int $id
-     * @return TypeOfTransaction
+     * @return TypeOfAccount
      */
-    public function setId(int $id): TypeOfTransaction
+    public function setId(int $id): TypeOfAccount
     {
         $this->id = $id;
         return $this;
@@ -58,9 +58,9 @@ class TypeOfTransaction
 
     /**
      * @param string $name
-     * @return TypeOfTransaction
+     * @return TypeOfAccount
      */
-    public function setName(string $name): TypeOfTransaction
+    public function setName(string $name): TypeOfAccount
     {
         $this->name = $name;
         return $this;
@@ -76,9 +76,9 @@ class TypeOfTransaction
 
     /**
      * @param string $surname
-     * @return TypeOfTransaction
+     * @return TypeOfAccount
      */
-    public function setSurname(string $surname): TypeOfTransaction
+    public function setSurname(string $surname): TypeOfAccount
     {
         $this->surname = $surname;
         return $this;

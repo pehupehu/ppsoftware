@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Financial;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="transactions")
- * @ORM\Entity(repositoryClass="App\Repository\TransactionRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Financial\TransactionRepository")
  */
 class Transaction
 {

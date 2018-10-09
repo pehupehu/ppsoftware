@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Financial;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="account_types")
- * @ORM\Entity(repositoryClass="App\Repository\TypeOfAccountRepository")
+ * @ORM\Table(name="banks")
+ * @ORM\Entity(repositoryClass="App\Repository\Financial\BankRepository")
  */
-class TypeOfAccount
+class Bank
 {
     /**
      * @ORM\Column(type="integer")
@@ -31,6 +31,12 @@ class TypeOfAccount
     private $surname;
 
     /**
+     * @ORM\Column(type="string")
+     * @var string
+     */
+    private $logo;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -40,9 +46,9 @@ class TypeOfAccount
 
     /**
      * @param int $id
-     * @return TypeOfAccount
+     * @return Bank
      */
-    public function setId(int $id): TypeOfAccount
+    public function setId(int $id): Bank
     {
         $this->id = $id;
         return $this;
@@ -58,9 +64,9 @@ class TypeOfAccount
 
     /**
      * @param string $name
-     * @return TypeOfAccount
+     * @return Bank
      */
-    public function setName(string $name): TypeOfAccount
+    public function setName(string $name): Bank
     {
         $this->name = $name;
         return $this;
@@ -76,11 +82,29 @@ class TypeOfAccount
 
     /**
      * @param string $surname
-     * @return TypeOfAccount
+     * @return Bank
      */
-    public function setSurname(string $surname): TypeOfAccount
+    public function setSurname(string $surname): Bank
     {
         $this->surname = $surname;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogo(): string
+    {
+        return $this->logo;
+    }
+
+    /**
+     * @param string $logo
+     * @return Bank
+     */
+    public function setLogo(string $logo): Bank
+    {
+        $this->logo = $logo;
         return $this;
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Financial;
 
 use Doctrine\ORM\EntityRepository;
 
 /**
  * Class CategoryRepository
- * @package App\Repository
+ * @package App\Repository\Financial
  */
 class CategoryRepository extends EntityRepository
 {
