@@ -1,12 +1,4 @@
 all:
-  delegation:
-    route: delegation
-    role: ROLE_USER
-
-  import:
-    route: import_index
-    role: ROLE_USER
-    disabled: true
 
   admin:
     children:
@@ -14,7 +6,7 @@ all:
         route: admin_user
         icon: oi oi-person
         role: ROLE_ADMIN
-    
+
       admin_reports:
         route: admin_reports
         icon: oi oi-graph
