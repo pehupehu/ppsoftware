@@ -1,0 +1,38 @@
+{% if (pager.nbPages > 0) %}
+    <nav class="navbar-pagination">
+        <div class="count-pagination">
+            {{ 'generic.pagination.count'|transchoice(pager.count) }}
+        </div>
+        <div>
+            <div class="mr-auto"></div>
+            <ul class="pagination justify-content-end">
+                {% if (pager.page > 1) %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ path(pager.routeName, pager.routeParams|merge({'page': 1})) }}" aria-label="{{ 'generic.pagination.previous'|trans }}">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">{{ 'generic.pagination.previous'|trans }}</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% for i_page in range(max(pager.page-4, 1), min(pager.page+4, pager.nbPages)) %}
+                    <li class="page-item {% if i_page == pager.page %}active{% endif %}">
+                        <a class="page-link" href="{{ path(pager.routeName, pager.routeParams|merge({'page': i_page})) }}">{{ i_page }}</a>
+                    </li>
+                {% endfor %}
+                {% if (pager.page < pager.nbPages) %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ path(pager.routeName, pager.routeParams|merge({'page': pager.nbPages})) }}" aria-label="{{ 'generic.pagination.next'|trans }}">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">{{ 'generic.pagination.next'|trans }}</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+{% endif %}
+{% if (pager.count == 0) %}
+    <div class="alert alert-primary">
+        {{ 'generic.pagination.no_result'|trans }}
+    </div>
+{% endif %}

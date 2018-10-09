@@ -1,0 +1,57 @@
+<div class="card-filters">
+    {{ form_start(formFilters) }}
+        <div class="form-row">
+            <div class="col-md-3">
+                {{ form_row(formFilters.firstname, {
+                    'label': 'admin_user.field.firstname',
+                    'attr': {
+                        'class': 'form-control-sm',
+                        'autocomplete': 'off'
+                    }
+                }) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_row(formFilters.lastname, {
+                    'label': 'admin_user.field.lastname',
+                    'attr': {
+                        'class': 'form-control-sm',
+                        'autocomplete': 'off'
+                    }
+                }) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_row(formFilters.username, {
+                    'label': 'admin_user.field.username',
+                    'attr': {
+                        'class': 'form-control-sm',
+                        'autocomplete': 'off'
+                    }
+                }) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_row(formFilters.role, {
+                    'label': 'admin_user.field.role',
+                    'attr': {
+                        'class': 'form-control-sm',
+                        'autocomplete': 'off'
+                    }
+                }) }}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form_widget(formFilters.reset, {
+                'label': 'generic.action.reset',
+                'attr': {
+                    'class': 'btn-sm btn-secondary',
+                    'onclick': ppboxRedirect(path('admin_user'))
+                }
+            }) }}
+            {{ form_widget(formFilters.submit, {
+                'label': 'generic.action.filter',
+                'attr': {
+                    'class': 'btn-sm btn-primary'
+                }
+            }) }}
+        </div>
+    {{ form_end(formFilters) }}
+</div>

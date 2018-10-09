@@ -1,0 +1,103 @@
+{% set inc = 0 %}
+<nav class="navbar bg-secondary navbar-expand-md fixed-top">
+    <div class="navbar-brand bg-dark col-sm-1 mr-0">
+        <a class="" href="{{ path('index') }}">{{ 'navbar.navbar_brand'|trans }}</a>
+    </div>
+    <div class="navbar-locale">
+        <ul class="nav navbar-nav">
+            <li class="nav-item dropdown">
+                {%  set locales = getSupportedLocales() %}
+                {% if (locales|length > 1) %}
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarLocaleDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="flag flag-{{ app.request.locale }}"></span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarLocaleDropdown">
+                        {% for locale, locale_name in locales %}
+                            <a class="dropdown-item" href="{{ path('profile_switch_locale', {'_locale': locale}) }}">
+                                <span class="flag flag-{{ locale }}"></span> {{ locale_name|trans }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <a class="nav-link">
+                        <span class="flag flag-{{ app.request.locale }}"></span>
+                    </a>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="mr-auto"></div>
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+            {% for item in navbar %}
+                {% if (item.isDropdown) %}
+                    {% set inc = inc + 1 %}
+                    <li class="nav-item {% if item.isActive %}active{% endif %} dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ inc }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {% if item.icon %}
+                                <span class="{{ item.icon }}" title="" aria-hidden="true"></span>
+                            {% endif %}
+                            {{ item.translationKey|trans }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown{{ inc }}">
+                            {% for dropdownItem in item %}
+                                <a class="dropdown-item {% if dropdownItem.isActive %}active{% endif %}" href="{{ path(dropdownItem.route) }}">
+                                    {% if dropdownItem.icon %}
+                                        <span class="{{ dropdownItem.icon }}" title="" aria-hidden="true"></span>
+                                    {% endif %}
+                                    {{ dropdownItem.translationKey|trans }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="nav-item {% if item.isActive %}active{% endif %}">
+                        <a class="nav-link" href="{{ path(item.route) }}">
+                            {% if item.icon %}
+                                <span class="{{ item.icon }}" title="" aria-hidden="true"></span>
+                            {% endif %}
+                            {{ item.translationKey|trans }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+    
+            {% if user %}
+                <li class="nav-item dropdown user user-menu {% if is_granted('ROLE_PREVIOUS_ADMIN') %}bg-warning{% endif %}">
+                    <a href="#" class="nav-link {% if is_granted('ROLE_PREVIOUS_ADMIN') %}text-dark{% endif %} dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="" class="user-image" alt="">
+                        <span class="hidden-xs">{{ user.getFirstname }} {{ user.getLastname }}</span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li class="user-header">
+                            <img src="" class="img-circle" alt="">
+                            <p>
+                                {{ user.getFirstname }} {{ user.getLastname }}
+                            </p>
+                        </li>
+                        {#<li class="user-body">#}
+                        {#</li>#}
+                        <li class="user-footer">
+                            <div class="pull-left">
+                                <a href="{{ path('profile') }}" class="btn btn-sm btn-outline-primary">Profile</a>
+                            </div>
+                            <div class="pull-right">
+                                <a href="{{ path('logout') }}" class="btn btn-sm btn-outline-secondary">Sign out</a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                <li class="nav-item bg-warning">
+                    <a class="nav-link text-dark" href="{{ path('index', {'_are_you_strong_to_be_someone_else': '_exit'}) }}"><span class="oi oi-account-logout"></span></a>
+                </li>
+                {% endif %}
+            {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

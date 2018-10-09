@@ -1,0 +1,48 @@
+{% extends 'layout_small.html.twig' %}
+
+{% block title %}
+    {% if (form.vars.data.id) %}{{ 'admin_user.title.edit'|trans }}{% else %}{{ 'admin_user.title.new'|trans }}{% endif %}
+{% endblock title %}
+
+{% block container %}
+    <h2>{% if (form.vars.data.id) %}{{ 'admin_user.title.edit'|trans }}{% else %}{{ 'admin_user.title.new'|trans }}{% endif %}</h2>
+    <div class="card">
+        <div class="card-body">
+            {{ form_start(form) }}
+                {{ form_row(form.firstname, {
+                    'label': 'admin_user.field.firstname'
+                }) }}
+                {{ form_row(form.lastname, {
+                    'label': 'admin_user.field.lastname'
+                }) }}
+                {% if (form.offsetExists('username')) %}
+                    {{ form_row(form.username, {
+                        'label': 'admin_user.field.username'
+                    }) }}
+                {% endif %}
+                {% if (form.offsetExists('password')) %}
+                    {{ form_row(form.password) }}
+                {% endif %}
+                {{ form_row(form.role, {
+                    'label': 'admin_user.field.role'
+                }) }}
+                {{ form_row(form.locale, {
+                    'label': 'profile.field.locale'
+                }) }}
+                {{ form_widget(form.back, {
+                    'label': 'generic.action.back',
+                    'attr': {
+                        'class': 'btn-secondary btn-sm',
+                        'onclick': ppboxRedirect(path('admin_user'))
+                    }
+                }) }}
+                {{ form_widget(form.save, {
+                    'label': 'generic.action.save',
+                    'attr': {
+                        'class': 'btn-primary btn-sm'
+                    }
+                }) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock container %}

@@ -1,0 +1,33 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+
+    providers:
+        default_provider:
+            entity:
+                class: App\Entity\User
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: ~
+            provider: default_provider
+            form_login:
+                login_path: login
+                check_path: login
+            logout:
+                path:   /logout
+                target: /
+                invalidate_session: true
+            switch_user: { role: ROLE_ADMIN, parameter: '_are_you_strong_to_be_someone_else' }
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/, roles: ROLE_USER }
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
