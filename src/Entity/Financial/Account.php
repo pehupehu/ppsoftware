@@ -2,6 +2,7 @@
 
 namespace App\Entity\Financial;
 
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,6 +23,19 @@ class Account
      * @ORM\Column(type="integer", options={"unsigned": true})
      * @var integer
      */
+    private $creator_id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
+     * @var User
+     */
+    private $creator;
+
+    /**
+     * @ORM\Column(type="integer", options={"unsigned": true})
+     * @var integer
+     */
     private $type_of_account_id;
 
     /**
@@ -29,7 +43,7 @@ class Account
      * @ORM\JoinColumn(name="type_of_account_id", referencedColumnName="id")
      * @var TypeOfAccount
      */
-    private $type_of_account;
+    private $typeOfAccount;
 
     /**
      * @ORM\Column(type="integer", options={"unsigned": true})
@@ -101,6 +115,42 @@ class Account
     /**
      * @return int
      */
+    public function getCreatorId(): int
+    {
+        return $this->creator_id;
+    }
+
+    /**
+     * @param int $creator_id
+     * @return Account
+     */
+    public function setCreatorId(int $creator_id): Account
+    {
+        $this->creator_id = $creator_id;
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getCreator(): User
+    {
+        return $this->creator;
+    }
+
+    /**
+     * @param User $creator
+     * @return Account
+     */
+    public function setCreator(User $creator): Account
+    {
+        $this->creator = $creator;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
     public function getTypeOfAccountId(): int
     {
         return $this->type_of_account_id;
@@ -121,16 +171,16 @@ class Account
      */
     public function getTypeOfAccount(): TypeOfAccount
     {
-        return $this->type_of_account;
+        return $this->typeOfAccount;
     }
 
     /**
-     * @param TypeOfAccount $type_of_account
+     * @param TypeOfAccount $typeOfAccount
      * @return Account
      */
-    public function setTypeOfAccount(TypeOfAccount $type_of_account): Account
+    public function setTypeOfAccount(TypeOfAccount $typeOfAccount): Account
     {
-        $this->type_of_account = $type_of_account;
+        $this->typeOfAccount = $typeOfAccount;
         return $this;
     }
 

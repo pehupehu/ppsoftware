@@ -6,6 +6,7 @@ navbar:
     admin_reports: Rapports
     financial: Finances
     bank: Banques
+    type_account: Types de comptes
 
 admin:
     title: Administration
@@ -66,6 +67,21 @@ financial:
                 new: La banque a été ajoutée avec succès
                 edit: La banque a été modifiée avec succès
                 remove: La banque a été supprimée avec succès
+    type_account:
+        field:
+            name: Libellé
+            surname: Libellé court
+        title:
+            list: Liste des types de comptes
+            new: Créer un nouveau type de compte
+            edit: Modifier un type de compte
+        action:
+            new: Créer un nouveau type de compte
+        message:
+            success:
+                new: Le type de compte a été ajouté avec succès
+                edit: Le type de compte a été modifié avec succès
+                remove: Le type de compte a été supprimé avec succès
 
 generic:
     field:

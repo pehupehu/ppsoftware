@@ -2,6 +2,7 @@
 
 namespace App\Entity\Financial;
 
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,6 +18,19 @@ class Transaction
      * @var integer
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="integer", options={"unsigned": true})
+     * @var integer
+     */
+    private $creator_id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
+     * @var User
+     */
+    private $creator;
 
     /**
      * @ORM\Column(type="integer", options={"unsigned": true})
@@ -38,6 +52,12 @@ class Transaction
     private $date;
 
     /**
+     * @ORM\Column(name="created_at" type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     * @var \DateTime
+     */
+    private $createdAt;
+
+    /**
      * @ORM\Column(name="updated_at", type="datetime", options={"columnDefinition": "DATETIME DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP"})
      * @var \DateTime
      */
@@ -54,7 +74,7 @@ class Transaction
      * @ORM\JoinColumn(name="type_of_transaction_id", referencedColumnName="id")
      * @var TypeOfTransaction
      */
-    private $type_of_transaction;
+    private $typeOfTransaction;
 
     /**
      * @ORM\Column(type="integer", options={"unsigned": true})
@@ -62,13 +82,18 @@ class Transaction
      */
     private $tick_user_id;
 
-    private $tick_user;
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="tick_user_id", referencedColumnName="id")
+     * @var User
+     */
+    private $tickUser;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="tick_date" type="datetime")
      * @var \DateTime
      */
-    private $tick_date;
+    private $tickDate;
 
     /**
      * @ORM\Column(type="integer", options={"unsigned": true})
@@ -122,6 +147,42 @@ class Transaction
     public function setId(int $id): Transaction
     {
         $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCreatorId(): int
+    {
+        return $this->creator_id;
+    }
+
+    /**
+     * @param int $creator_id
+     * @return Transaction
+     */
+    public function setCreatorId(int $creator_id): Transaction
+    {
+        $this->creator_id = $creator_id;
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getCreator(): User
+    {
+        return $this->creator;
+    }
+
+    /**
+     * @param User $creator
+     * @return Transaction
+     */
+    public function setCreator(User $creator): Transaction
+    {
+        $this->creator = $creator;
         return $this;
     }
 
@@ -182,6 +243,24 @@ class Transaction
     /**
      * @return \DateTime
      */
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     * @return Transaction
+     */
+    public function setCreatedAt(\DateTime $createdAt): Transaction
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
     public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
@@ -220,16 +299,16 @@ class Transaction
      */
     public function getTypeOfTransaction(): TypeOfTransaction
     {
-        return $this->type_of_transaction;
+        return $this->typeOfTransaction;
     }
 
     /**
-     * @param TypeOfTransaction $type_of_transaction
+     * @param TypeOfTransaction $typeOfTransaction
      * @return Transaction
      */
-    public function setTypeOfTransaction(TypeOfTransaction $type_of_transaction): Transaction
+    public function setTypeOfTransaction(TypeOfTransaction $typeOfTransaction): Transaction
     {
-        $this->type_of_transaction = $type_of_transaction;
+        $this->typeOfTransaction = $typeOfTransaction;
         return $this;
     }
 
@@ -252,20 +331,20 @@ class Transaction
     }
 
     /**
-     * @return mixed
+     * @return User
      */
-    public function getTickUser()
+    public function getTickUser(): User
     {
-        return $this->tick_user;
+        return $this->tickUser;
     }
 
     /**
-     * @param mixed $tick_user
+     * @param User $tickUser
      * @return Transaction
      */
-    public function setTickUser($tick_user)
+    public function setTickUser(User $tickUser): Transaction
     {
-        $this->tick_user = $tick_user;
+        $this->tickUser = $tickUser;
         return $this;
     }
 
@@ -274,16 +353,16 @@ class Transaction
      */
     public function getTickDate(): \DateTime
     {
-        return $this->tick_date;
+        return $this->tickDate;
     }
 
     /**
-     * @param \DateTime $tick_date
+     * @param \DateTime $tickDate
      * @return Transaction
      */
-    public function setTickDate(\DateTime $tick_date): Transaction
+    public function setTickDate(\DateTime $tickDate): Transaction
     {
-        $this->tick_date = $tick_date;
+        $this->tickDate = $tickDate;
         return $this;
     }
 

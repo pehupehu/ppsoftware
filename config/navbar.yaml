@@ -6,6 +6,9 @@ all:
         route: financial_bank
         icon: oi oi-bank
         role: ROLE_USER
+      type_account:
+        route: financial_type_account
+        role: ROLE_USER
 
   admin:
     children:
