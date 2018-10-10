@@ -1,0 +1,50 @@
+{% extends 'layout_small.html.twig' %}
+
+{% block title %}
+    {% if (form.vars.data.id) %}{{ 'financial.bank.title.edit'|trans }}{% else %}{{ 'financial.bank.title.new'|trans }}{% endif %}
+{% endblock title %}
+
+{% block container %}
+    <h2>{% if (form.vars.data.id) %}{{ 'financial.bank.title.edit'|trans }}{% else %}{{ 'financial.bank.title.new'|trans }}{% endif %}</h2>
+    <div class="card">
+        <div class="card-body">
+            {{ form_start(form) }}
+                <div class="form-row">
+                    <div class="img-preview-row col-3">
+                        {{ form_label(form.file, 'generic.field.logo') }}
+                        <img class="img-preview-form img-thumbnail img-fluid" title="{% if (form.vars.data.logo) %}{{ 'generic.field.clic_to_modify'|trans }}{% else %}{{ 'generic.field.clic_to_add'|trans }}{% endif %}" src="{% if (form.vars.data.logo) %}{{ asset(app_bank_logo_dir ~ '/' ~ form.vars.data.logo) }}{% endif %}">
+                        <div class="d-none">
+                            {{ form_row(form.file, {
+                                'label': 'generic.field.logo',
+                                'attr': {
+                                    'class': 'img-preview-form-file'
+                                }
+                            }) }}
+                        </div>
+                    </div>
+                    <div class="col-9">
+                    {{ form_row(form.name, {
+                        'label': 'financial.bank.field.name'
+                    }) }}
+                    {{ form_row(form.surname, {
+                        'label': 'financial.bank.field.surname'
+                    }) }}
+                    </div>
+                </div>
+                {{ form_widget(form.back, {
+                    'label': 'generic.action.back',
+                    'attr': {
+                        'class': 'btn-secondary btn-sm',
+                        'onclick': ppboxRedirect(path('financial_bank'))
+                    }
+                }) }}
+                {{ form_widget(form.save, {
+                    'label': 'generic.action.save',
+                    'attr': {
+                        'class': 'btn-primary btn-sm'
+                    }
+                }) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock container %}

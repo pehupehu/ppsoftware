@@ -1,6 +1,7 @@
 
 .DS_STORE
 .idea
+/public/data/
 
 ###> symfony/framework-bundle ###
 /.env

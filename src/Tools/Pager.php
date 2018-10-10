@@ -169,7 +169,7 @@ class Pager
      */
     public function getRouteParams(): array
     {
-        return $this->route_params;
+        return $this->route_params ?? [];
     }
 
     /**

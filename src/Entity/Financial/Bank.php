@@ -3,10 +3,12 @@
 namespace App\Entity\Financial;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table(name="banks")
  * @ORM\Entity(repositoryClass="App\Repository\Financial\BankRepository")
+ * @UniqueEntity("surname")
  */
 class Bank
 {
@@ -31,7 +33,7 @@ class Bank
     private $surname;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @var string
      */
     private $logo;
@@ -106,5 +108,19 @@ class Bank
     {
         $this->logo = $logo;
         return $this;
+    }
+
+    public function canBeRemove()
+    {
+        return true;
+    }
+
+    public function remove()
+    {
+        if (!$this->canBeRemove()) {
+            return false;
+        }
+
+        return true;
     }
 }

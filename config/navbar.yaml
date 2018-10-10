@@ -1,5 +1,12 @@
 all:
 
+  financial:
+    children:
+      bank:
+        route: financial_bank
+        icon: oi oi-bank
+        role: ROLE_USER
+
   admin:
     children:
       admin_user:

@@ -1,11 +1,11 @@
 navbar:
-    navbar_brand: Budget
-    import: Importer de données
+    navbar_brand: PPSoftware
     admin: Administration
     profile: Mon profil
     admin_user: Utilisateurs
     admin_reports: Rapports
-    delegation: Délégations
+    financial: Finances
+    bank: Banques
 
 admin:
     title: Administration
@@ -50,34 +50,30 @@ profile:
     message:
         success: Votre profil a été mis à jour
 
-
-delegation:
-    field:
-        name: Libellé
-        code: Code
-    title:
-        list: Liste des délégations
-        new: Créer une nouvelle délégation
-        edit: Modifier une délégation
-        import: Importer les délégations
-    action:
-        new: Créer une nouvelle délégation
-        import: Importer les délégations
-    message:
-        success:
-            new: La délégation a été ajoutée avec succès
-            edit: La délégation a été modifiée avec succès
-            remove: La délégation a été supprimée avec succès
-        up_to_date: Aucune modification n'a été trouvée.
-        count_remove: "{1} %count% délégation a été supprimée|]1,Inf[ %count% délégations ont été supprimées"
-        count_add: "{1} %count% délégation a été ajoutée|]1,Inf[ %count% délégations ont été ajoutées"
-        count_overwrite: "{1} %count% délégation a été remplacée|]1,Inf[ %count% délégations ont été remplacées"
-        count_skip: "{1} %count% délégation a été ignorée|]1,Inf[ %count% délégations ont été ignorées"
+financial:
+    bank:
+        field:
+            name: Libellé
+            surname: Libellé court
+        title:
+            list: Liste des banques
+            new: Créer une nouvelle banque
+            edit: Modifier une banque
+        action:
+            new: Créer une nouvelle banque
+        message:
+            success:
+                new: La banque a été ajoutée avec succès
+                edit: La banque a été modifiée avec succès
+                remove: La banque a été supprimée avec succès
 
 generic:
     field:
         actions: Actions
         file: Fichier
+        logo: Logo
+        clic_to_add: Cliquez pour ajouter
+        clic_to_modify: Cliquez pour modifier
     choice:
         resolve_add: Ajouter
         resolve_overwrite: Remplacer
