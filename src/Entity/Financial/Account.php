@@ -26,7 +26,7 @@ class Account
     private $creator_id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
      * @var User
      */
@@ -326,5 +326,25 @@ class Account
     {
         $this->amount_currency = $amount_currency;
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canBeRemove()
+    {
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function remove()
+    {
+        if (!$this->canBeRemove()) {
+            return false;
+        }
+
+        return true;
     }
 }

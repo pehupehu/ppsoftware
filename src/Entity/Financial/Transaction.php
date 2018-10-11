@@ -26,7 +26,7 @@ class Transaction
     private $creator_id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
      * @var User
      */
@@ -52,7 +52,7 @@ class Transaction
     private $date;
 
     /**
-     * @ORM\Column(name="created_at" type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     * @ORM\Column(name="created_at", type="datetime", options={"default": "CURRENT_TIMESTAMP"})
      * @var \DateTime
      */
     private $createdAt;
@@ -83,14 +83,14 @@ class Transaction
     private $tick_user_id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="tick_user_id", referencedColumnName="id")
      * @var User
      */
     private $tickUser;
 
     /**
-     * @ORM\Column(name="tick_date" type="datetime")
+     * @ORM\Column(name="tick_date", type="datetime")
      * @var \DateTime
      */
     private $tickDate;

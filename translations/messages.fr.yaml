@@ -7,6 +7,7 @@ navbar:
     financial: Finances
     bank: Banques
     type_account: Types de comptes
+    account: Comptes
 
 admin:
     title: Administration
@@ -82,6 +83,24 @@ financial:
                 new: Le type de compte a été ajouté avec succès
                 edit: Le type de compte a été modifié avec succès
                 remove: Le type de compte a été supprimé avec succès
+    account:
+        field:
+            name: Libellé
+            surname: Libellé court
+            bank: Banque
+            type_account: Type de compte
+            initial_balance: Balance initiale
+        title:
+            list: Liste des comptes
+            new: Créer un nouveau compte
+            edit: Modifier un compte
+        action:
+            new: Créer un nouveau compte
+        message:
+            success:
+                new: Le compte a été ajouté avec succès
+                edit: Le compte a été modifié avec succès
+                remove: Le compte a été supprimé avec succès
 
 generic:
     field:

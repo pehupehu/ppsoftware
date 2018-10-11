@@ -24,9 +24,6 @@ class BankType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Bank::class,
-            'constraints' => [
-                new UniqueEntity(['fields' => ['surname']]),
-            ]
         ]);
     }
 
@@ -42,6 +39,9 @@ class BankType extends AbstractType
             ])
             ->add('surname', null, [
                 'required' => true,
+                'constraints' => [
+                    new UniqueEntity(['fields' => ['surname']]),
+                ]
             ])
             ->add('file', FileType::class, [
                 'required' => false,

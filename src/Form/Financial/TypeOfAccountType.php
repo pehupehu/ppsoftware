@@ -6,7 +6,6 @@ use App\Entity\Financial\TypeOfAccount;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,9 +23,6 @@ class TypeOfAccountType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => TypeOfAccount::class,
-            'constraints' => [
-                new UniqueEntity(['fields' => ['surname']]),
-            ]
         ]);
     }
 
@@ -42,6 +38,9 @@ class TypeOfAccountType extends AbstractType
             ])
             ->add('surname', null, [
                 'required' => true,
+                'constraints' => [
+                    new UniqueEntity(['fields' => ['surname']]),
+                ]
             ])
             ->add('back', ButtonType::class)
             ->add('save', SubmitType::class);

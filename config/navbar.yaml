@@ -4,10 +4,13 @@ all:
     children:
       bank:
         route: financial_bank
-        icon: oi oi-bank
+        icon: oi oi-basket
         role: ROLE_USER
       type_account:
         route: financial_type_account
+        role: ROLE_USER
+      account:
+        route: financial_account
         role: ROLE_USER
 
   admin:
