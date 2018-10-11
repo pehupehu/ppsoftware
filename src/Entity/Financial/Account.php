@@ -3,6 +3,7 @@
 namespace App\Entity\Financial;
 
 use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -93,6 +94,20 @@ class Account
      * @var string
      */
     private $amount_currency;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="accounts")
+     * @var ArrayCollection
+     */
+    private $users;
+
+    /**
+     * Account constructor.
+     */
+    public function __construct()
+    {
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * @return int
@@ -329,22 +344,96 @@ class Account
     }
 
     /**
-     * @return bool
+     * @return array
      */
-    public function canBeRemove()
+    public function getUsers(): array
     {
-        return true;
+        return $this->users->toArray();
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getUsersCollection()
+    {
+        return $this->users;
+    }
+
+    /**
+     * @param User $user
+     * @return Account
+     */
+    public function addUser(User $user): Account
+    {
+        if (!$this->getUsersCollection()->contains($user)) {
+            dump($user);
+            $this->getUsersCollection()->add($user);
+            if (!$user->getAccountsCollection()->contains($this)) {
+                $user->getAccountsCollection()->add($this);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @param User $user
+     * @return Account
+     */
+    public function removeUser(User $user): Account
+    {
+        $this->getUsersCollection()->removeElement($user);
+        $user->getAccountsCollection()->removeElement($this);
+        return $this;
+    }
+
+    /**
+     * @param User $user
      * @return bool
      */
-    public function remove()
+    public function canBeRemove(User $user): bool
     {
-        if (!$this->canBeRemove()) {
+        return $this->canEditAccount($user);
+
+        // Check if account is used
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function remove(User $user): bool
+    {
+        if (!$this->canBeRemove($user)) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function isCreator(User $user): bool
+    {
+        return $this->getCreator() === $user;
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function canEditAccount(User $user): bool
+    {
+        return $this->isCreator($user) OR $this->getUsersCollection()->contains($user);
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function canShareAccount(User $user): bool
+    {
+        return $this->isCreator($user);
     }
 }

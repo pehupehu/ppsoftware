@@ -10,5 +10,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class TypeOfTransactionRepository extends EntityRepository
 {
-
+    public function loadTypes()
+    {
+        $query = $this->createQueryBuilder('t');
+        return $query->getQuery();
+    }
 }

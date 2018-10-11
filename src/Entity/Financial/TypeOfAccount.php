@@ -87,7 +87,7 @@ class TypeOfAccount
     /**
      * @return bool
      */
-    public function canBeRemove()
+    public function canBeRemove(): bool
     {
         return true;
     }
@@ -95,7 +95,7 @@ class TypeOfAccount
     /**
      * @return bool
      */
-    public function remove()
+    public function remove(): bool
     {
         if (!$this->canBeRemove()) {
             return false;

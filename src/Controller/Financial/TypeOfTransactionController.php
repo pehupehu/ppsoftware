@@ -29,7 +29,7 @@ class TypeOfTransactionController extends AbstractController
     {
         /** @var TypeOfTransactionRepository $typeOfTransactionRepo */
         $typeOfTransactionRepo = $this->getDoctrine()->getRepository(TypeOfTransaction::class);
-        $pager = new Pager($typeOfTransactionRepo->createQueryBuilder('b'));
+        $pager = new Pager($typeOfTransactionRepo->loadTypes());
         $pager->setPage($request->get('page', 1));
         $pager->setRouteName('financial_type_transaction');
 

@@ -5,12 +5,16 @@ namespace App\Controller\Financial;
 use App\Entity\Financial\Account;
 use App\Entity\Financial\Bank;
 use App\Entity\Financial\TypeOfAccount;
+use App\Entity\User;
+use App\Form\Financial\AccountShareType;
 use App\Form\Financial\AccountType;
 use App\Repository\Financial\AccountRepository;
 use App\Tools\Currency;
 use App\Tools\FlashBagTranslator;
 use App\Tools\Pager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,11 +36,12 @@ class AccountController extends AbstractController
     {
         /** @var AccountRepository $accountRepo */
         $accountRepo = $this->getDoctrine()->getRepository(Account::class);
-        $pager = new Pager($accountRepo->createQueryBuilder('b'));
+        $pager = new Pager($accountRepo->loadAccounts($this->getUser()));
         $pager->setPage($request->get('page', 1));
         $pager->setRouteName('financial_account');
 
         return $this->render('financial/account/list.html.twig', [
+            'loggedUser' => $this->getUser(),
             'pager' => $pager,
         ]);
     }
@@ -104,6 +109,10 @@ class AccountController extends AbstractController
      */
     public function edit(Request $request, FlashBagTranslator $flashBagTranslator, Account $account): Response
     {
+        if (!$account->canEditAccount($this->getUser())) {
+            throw new AccessDeniedException();
+        }
+
         $form = $this->createForm(AccountType::class, $account);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -134,7 +143,7 @@ class AccountController extends AbstractController
      */
     public function remove(FlashBagTranslator $flashBagTranslator, Account $account): Response
     {
-        if ($account->remove()) {
+        if ($account->remove($this->getUser())) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($account);
             $entityManager->flush();
@@ -145,5 +154,53 @@ class AccountController extends AbstractController
         }
 
         return $this->redirectToRoute('financial_account');
+    }
+
+    /**
+     * @Route("/financial/account/{id}/share", name="financial_account_share")
+     *
+     * @param Request $request
+     * @param FlashBagTranslator $flashBagTranslator
+     * @param Account $account
+     *
+     * @return Response
+     */
+    public function share(Request $request, FlashBagTranslator $flashBagTranslator, Account $account): Response
+    {
+        if (!$account->canShareAccount($this->getUser())) {
+            throw new AccessDeniedException();
+        }
+
+        /** @var Form $form */
+        $form = $this->createForm(AccountShareType::class, $account);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Account $account */
+            $account = $form->getData();
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            /** @var User $user */
+            foreach ($account->getUsers() as $user) {
+                if (in_array($user, $form->get('unallowed')->getData())) {
+                    $account->removeUser($user);
+                }
+            }
+            foreach ($form->get('allowed')->getData() as $user) {
+                $account->addUser($user);
+            }
+
+            $entityManager->persist($account);
+            $entityManager->flush();
+
+            $flashBagTranslator->add('success', 'financial.account.message.success.share');
+
+            return $this->redirectToRoute('financial_account');
+        }
+
+        return $this->render('financial/account/share.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

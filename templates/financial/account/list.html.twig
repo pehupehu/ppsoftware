@@ -51,10 +51,17 @@
                             {{ account.surname }}
                         </td>
                         <td class="text-center d-none d-sm-none d-md-none d-lg-none d-xl-table-cell">
-                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="{{ ppboxRedirect(path('financial_account_edit', {'id': account.id})) }}">
-                                <span class="oi oi-pencil"></span> {{ 'generic.action.edit'|trans }}
-                            </button>
-                            {% if account.canBeRemove %}
+                            {% if account.canEditAccount(loggedUser) %}
+                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="{{ ppboxRedirect(path('financial_account_edit', {'id': account.id})) }}">
+                                    <span class="oi oi-pencil"></span> {{ 'generic.action.edit'|trans }}
+                                </button>
+                            {% endif %}
+                            {% if account.canShareAccount(loggedUser) %}
+                                <button type="button" class="btn btn-sm btn-outline-info" onclick="{{ ppboxRedirect(path('financial_account_share', {'id': account.id})) }}">
+                                    <span class="oi oi-people"></span> {{ 'generic.action.share'|trans }}
+                                </button>
+                            {% endif %}
+                            {% if account.canBeRemove(loggedUser) %}
                                 <button type="button" class="btn btn-sm btn-outline-danger ppboxconfirm"
                                     data-ppbox-id="{{ 'dialogRemove' ~ key }}"
                                     data-ppbox-theme="danger"
@@ -74,10 +81,17 @@
                                     {{ 'generic.field.actions'|trans }}
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    <a class="dropdown-item" href="#" onclick="{{ ppboxRedirect(path('financial_account_edit', {'id': account.id})) }}">
-                                        <span class="oi oi-pencil"></span> {{ 'generic.action.edit'|trans }}
-                                    </a>
-                                    {% if account.canBeRemove %}
+                                    {% if account.canEditAccount(loggedUser) %}
+                                        <a class="dropdown-item" href="#" onclick="{{ ppboxRedirect(path('financial_account_edit', {'id': account.id})) }}">
+                                            <span class="oi oi-pencil"></span> {{ 'generic.action.edit'|trans }}
+                                        </a>
+                                    {% endif %}
+                                    {% if account.canShareAccount(loggedUser) %}
+                                        <a class="dropdown-item" href="#" onclick="{{ ppboxRedirect(path('financial_account_share', {'id': account.id})) }}">
+                                            <span class="oi oi-people"></span> {{ 'generic.action.share'|trans }}
+                                        </a>
+                                    {% endif %}
+                                    {% if account.canBeRemove(loggedUser) %}
                                         <a class="dropdown-item ppboxconfirm" href="#"
                                             data-ppbox-id="{{ 'dialogRemove' ~ key }}"
                                             data-ppbox-theme="danger"

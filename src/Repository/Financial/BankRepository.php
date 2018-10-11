@@ -11,26 +11,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class BankRepository extends EntityRepository
 {
-    public function getChoices($name_surname = false)
+    public function loadBanks()
     {
-        $choices = [];
-
-        $query = $this->createQueryBuilder('t')->getQuery();
-
-        /** @var Bank $bank */
-        foreach ($query->execute() as $bank) {
-            if ($name_surname) {
-                $choices[$bank->getSurname()] = $bank->getId();
-            } else {
-                $choices[$bank->getName()] = $bank->getId();
-            }
-        }
-
-        return $choices;
-    }
-
-    public function getBanks()
-    {
-        return $this->findAll();
+        $query = $this->createQueryBuilder('b');
+        return $query->getQuery();
     }
 }

@@ -91,10 +91,13 @@ financial:
             bank: Banque
             type_account: Type de compte
             initial_balance: Balance initiale
+            allowed_users: Utilisateurs autorisés
+            unallowed_users: Utilisateurs non autorisés
         title:
             list: Liste des comptes
             new: Créer un nouveau compte
             edit: Modifier un compte
+            share: Partager l'accès à ce compte
         action:
             new: Créer un nouveau compte
         message:
@@ -102,6 +105,7 @@ financial:
                 new: Le compte a été ajouté avec succès
                 edit: Le compte a été modifié avec succès
                 remove: Le compte a été supprimé avec succès
+                share: Le partage du compte a été mis à jour avec succès
     type_transaction:
         field:
             name: Libellé
@@ -140,6 +144,7 @@ generic:
         import: Importer
         filter: Filtrer
         reset: Réinitialiser
+        share: Partager
     checkboxes:
         check_all: Tout
         uncheck_all: Aucun

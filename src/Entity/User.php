@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Financial\Account;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -82,11 +84,21 @@ class User implements UserInterface, \Serializable
     private $updatedAt;
 
     /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Financial\Account", inversedBy="users")
+     * @ORM\JoinTable(name="users_accounts")
+     * @var ArrayCollection
+     */
+    private $accounts;
+
+    /**
      * User constructor.
      */
     public function __construct()
     {
         $this->isActive = true;
+
+        $this->accounts = new \Doctrine\Common\Collections\ArrayCollection();
+
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid('', true));
     }
@@ -297,6 +309,37 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * @return array
+     */
+    public function getAccounts(): array
+    {
+        return $this->accounts->toArray();
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getAccountsCollection()
+    {
+        return $this->accounts;
+    }
+
+    /**
+     * @param Account $account
+     * @return User
+     */
+    public function addAccount(Account $account): User
+    {
+        if (!$this->getAccountsCollection()->contains($account)) {
+            $this->getAccountsCollection()->add($account);
+            if (!$account->getUsersCollection()->contains($this)) {
+                $account->getUsersCollection()->add($this);
+            }
+        }
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function canBeEnable(): bool
@@ -373,4 +416,8 @@ class User implements UserInterface, \Serializable
         return $loggedUser->getId() === $this->getId();
     }
 
+    public function getDisplayableName()
+    {
+        return ucfirst(strtolower($this->getFirstname())) . ' ' . strtoupper($this->getLastname());
+    }
 }

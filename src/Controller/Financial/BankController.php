@@ -31,7 +31,7 @@ class BankController extends AbstractController
     {
         /** @var BankRepository $bankRepo */
         $bankRepo = $this->getDoctrine()->getRepository(Bank::class);
-        $pager = new Pager($bankRepo->createQueryBuilder('b'));
+        $pager = new Pager($bankRepo->loadBanks());
         $pager->setPage($request->get('page', 1));
         $pager->setRouteName('financial_bank');
 

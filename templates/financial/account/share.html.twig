@@ -1,0 +1,56 @@
+{% extends 'layout_small.html.twig' %}
+
+{% block title %}
+    {{ 'financial.account.title.share'|trans }}
+{% endblock title %}
+
+{% block container %}
+    <h2>{{ 'financial.account.title.share'|trans }}</h2>
+    <div class="card">
+        <div class="card-body">
+            {{ form_start(form) }}
+                <div class="form-share">
+                    <div class="form-row">
+                        <div class="col-5">
+                            {{ form_row(form.unallowed, {
+                                'label': 'financial.account.field.unallowed_users',
+                                'attr': {
+                                    'class': 'form-share-unallowed text-warning'
+                                }
+                            }) }}
+                        </div>
+                        <div class="offset-2 col-5">
+                            {{ form_row(form.allowed, {
+                                'label': 'financial.account.field.allowed_users',
+                                'attr': {
+                                    'class': 'form-share-allowed text-success'
+                                }
+                            }) }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-12 text-center">
+                            <button type="button" class="btn-share-allowed btn btn-sm btn-outline-secondary">>>></button>
+                            <button type="button" class="btn-share-unallowed btn btn-sm btn-outline-secondary"><<<</button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        {{ form_widget(form.back, {
+                            'label': 'generic.action.back',
+                            'attr': {
+                                'class': 'btn-secondary btn-sm',
+                                'onclick': ppboxRedirect(path('financial_account'))
+                            }
+                        }) }}
+                        {{ form_widget(form.save, {
+                            'label': 'generic.action.save',
+                            'attr': {
+                                'class': 'btn-primary btn-share-submit btn-sm'
+                            }
+                        }) }}
+                    </div>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock container %}
