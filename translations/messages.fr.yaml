@@ -8,6 +8,7 @@ navbar:
     bank: Banques
     type_account: Types de comptes
     account: Comptes
+    type_transaction: Types d'opérations
 
 admin:
     title: Administration
@@ -101,6 +102,21 @@ financial:
                 new: Le compte a été ajouté avec succès
                 edit: Le compte a été modifié avec succès
                 remove: Le compte a été supprimé avec succès
+    type_transaction:
+        field:
+            name: Libellé
+            surname: Libellé court
+        title:
+            list: Liste des types d'opérations
+            new: Créer un nouveau type d'opération
+            edit: Modifier un type d'opération
+        action:
+            new: Créer un nouveau type d'opération
+        message:
+            success:
+                new: Le type d'opération a été ajouté avec succès
+                edit: Le type d'opération a été modifié avec succès
+                remove: Le type d'opération a été supprimé avec succès
 
 generic:
     field:

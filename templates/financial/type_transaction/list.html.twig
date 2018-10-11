@@ -1,0 +1,103 @@
+{% extends 'layout_small.html.twig' %}
+
+{% block title %}
+    {{ 'financial.type_transaction.title.list'|trans }}
+{% endblock title %}
+
+{% block container %}
+    <div class="card card-listing">
+
+        {% include 'flashbag.html.twig' %}
+
+        <div class="card-header">
+            <h2>
+                {{ 'financial.type_transaction.title.list'|trans }}
+                <button type="button" class="btn btn-sm btn-primary" onclick="{{ ppboxRedirect(path('financial_type_transaction_new')) }}">
+                    <span class="oi oi-play-circle"></span> {{ 'financial.type_transaction.action.new'|trans }}
+                </button>
+            </h2>
+        </div>
+
+        <div class="card-body">
+
+            {% include 'pagination.html.twig' with {'pager': pager} %}
+
+            {% if (pager.count) %}
+                <table class="table table-hover table-listing">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th class="text-center">
+                            <div class="form-check form-check-inline">
+                                <input type="checkbox" class="form-check-input pp-check-uncheck-all" data-check="{{ 'generic.checkboxes.check_all'|trans }}" data-uncheck="{{ 'generic.checkboxes.uncheck_all'|trans }}" title="">
+                            </div>
+                        </th>
+                        <th class="text-center d-none d-sm-none d-md-table-cell" scope="col">{{ 'financial.type_transaction.field.name'|trans }}</th>
+                        <th class="text-center d-none d-sm-none d-md-table-cell" scope="col">{{ 'financial.type_transaction.field.surname'|trans }}</th>
+                        <th class="text-center" scope="col">{{ 'generic.field.actions'|trans }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for key, type_transaction in pager.iterator %}
+                    <tr class="pp-check-uncheck-row">
+                        <td class="text-center">
+                            <div class="form-check form-check-inline">
+                                <input type="checkbox" class="form-check-input pp-check-uncheck-id" data-id="{{ type_transaction.id }}" title="">
+                            </div>
+                        </td>
+                        <td class="text-center d-none d-sm-none d-md-table-cell">
+                            {{ type_transaction.name }}
+                        </td>
+                        <td class="text-center d-none d-sm-none d-md-table-cell">
+                            {{ type_transaction.surname }}
+                        </td>
+                        <td class="text-center d-none d-sm-none d-md-none d-lg-none d-xl-table-cell">
+                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="{{ ppboxRedirect(path('financial_type_transaction_edit', {'id': type_transaction.id})) }}">
+                                <span class="oi oi-pencil"></span> {{ 'generic.action.edit'|trans }}
+                            </button>
+                            {% if type_transaction.canBeRemove %}
+                                <button type="button" class="btn btn-sm btn-outline-danger ppboxconfirm"
+                                    data-ppbox-id="{{ 'dialogRemove' ~ key }}"
+                                    data-ppbox-theme="danger"
+                                    data-ppbox-width="sm"
+                                    data-ppbox-title="{{ 'generic.diag_confirm.title'|trans }}"
+                                    data-ppbox-body="{{ 'generic.diag_confirm.message'|trans }}"
+                                    data-ppbox-button1="{{ {text: 'generic.diag_confirm.confirm'|trans, redirect: path('financial_type_transaction_remove', {'id': type_transaction.id}) }|json_encode() }}"
+                                    data-ppbox-button2="{{ {text: 'generic.diag_confirm.cancel'|trans }|json_encode() }}"
+                                >
+                                    <span class="oi oi-trash"></span> {{ 'generic.action.remove'|trans }}
+                                </button>
+                            {% endif %}
+                        </td>
+                        <td class="text-center d-table-cell d-sm-table-cell d-md-table-cell d-lg-table-cell d-xl-none">
+                            <div class="btn-group" role="group">
+                                <button id="btnGroupDrop1" type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ 'generic.field.actions'|trans }}
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                    <a class="dropdown-item" href="#" onclick="{{ ppboxRedirect(path('financial_type_transaction_edit', {'id': type_transaction.id})) }}">
+                                        <span class="oi oi-pencil"></span> {{ 'generic.action.edit'|trans }}
+                                    </a>
+                                    {% if type_transaction.canBeRemove %}
+                                        <a class="dropdown-item ppboxconfirm" href="#"
+                                            data-ppbox-id="{{ 'dialogRemove' ~ key }}"
+                                            data-ppbox-theme="danger"
+                                            data-ppbox-width="sm"
+                                            data-ppbox-title="{{ 'generic.diag_confirm.title'|trans }}"
+                                            data-ppbox-body="{{ 'generic.diag_confirm.message'|trans }}"
+                                            data-ppbox-button1="{{ {text: 'generic.diag_confirm.confirm'|trans, redirect: path('financial_type_transaction_remove', {'id': type_transaction.id}) }|json_encode() }}"
+                                            data-ppbox-button2="{{ {text: 'generic.diag_confirm.cancel'|trans }|json_encode() }}"
+                                        >
+                                            <span class="oi oi-trash"></span> {{ 'generic.action.remove'|trans }}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock container %}

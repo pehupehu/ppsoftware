@@ -23,6 +23,9 @@ class TypeOfAccountType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => TypeOfAccount::class,
+            'constraints' => [
+                new UniqueEntity(['fields' => ['surname']]),
+            ]
         ]);
     }
 
@@ -38,9 +41,6 @@ class TypeOfAccountType extends AbstractType
             ])
             ->add('surname', null, [
                 'required' => true,
-                'constraints' => [
-                    new UniqueEntity(['fields' => ['surname']]),
-                ]
             ])
             ->add('back', ButtonType::class)
             ->add('save', SubmitType::class);

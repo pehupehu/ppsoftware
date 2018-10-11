@@ -2,20 +2,19 @@
 
 namespace App\Form\Financial;
 
-use App\Entity\Financial\Bank;
+use App\Entity\Financial\TypeOfTransaction;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class BankType
+ * Class TypeOfTransactionType
  * @package App\Form\Financial
  */
-class BankType extends AbstractType
+class TypeOfTransactionType extends AbstractType
 {
     /**
      * @param OptionsResolver $resolver
@@ -23,7 +22,7 @@ class BankType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Bank::class,
+            'data_class' => TypeOfTransaction::class,
             'constraints' => [
                 new UniqueEntity(['fields' => ['surname']]),
             ]
@@ -42,10 +41,6 @@ class BankType extends AbstractType
             ])
             ->add('surname', null, [
                 'required' => true,
-            ])
-            ->add('file', FileType::class, [
-                'required' => false,
-                'mapped' => false,
             ])
             ->add('back', ButtonType::class)
             ->add('save', SubmitType::class);

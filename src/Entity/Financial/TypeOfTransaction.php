@@ -83,4 +83,24 @@ class TypeOfTransaction
         $this->surname = $surname;
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function canBeRemove()
+    {
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function remove()
+    {
+        if (!$this->canBeRemove()) {
+            return false;
+        }
+
+        return true;
+    }
 }

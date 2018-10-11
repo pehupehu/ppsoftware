@@ -8,6 +8,7 @@ use App\Entity\Financial\TypeOfAccount;
 use App\Form\EntityManagerType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -29,6 +30,9 @@ class AccountType extends EntityManagerType
     {
         $resolver->setDefaults([
             'data_class' => Account::class,
+            'constraints' => [
+                new UniqueEntity(['fields' => ['surname']]),
+            ]
         ]);
     }
 
@@ -50,9 +54,6 @@ class AccountType extends EntityManagerType
                 },
                 'choice_value' => 'id',
                 'choice_label' => 'name',
-//                'required' => true,
-//                'choices' => $repoBank->getBanks(),
-//                'choice_translation_domain' => false,
             ])
             ->add('typeOfAccount', EntityType::class, [
                 'class' => TypeOfAccount::class,
@@ -62,9 +63,6 @@ class AccountType extends EntityManagerType
                 },
                 'choice_value' => 'id',
                 'choice_label' => 'name',
-//                'required' => true,
-//                'choices' => $repoTypeOfAccount->getTypes(),
-//                'choice_translation_domain' => false,
             ])
             ->add('name', null, [
                 'required' => true,
