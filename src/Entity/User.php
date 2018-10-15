@@ -487,4 +487,9 @@ class User implements UserInterface, \Serializable
     {
         return ucfirst(strtolower($this->getFirstname())) . ' ' . strtoupper($this->getLastname());
     }
+    
+    public function __toString()
+    {
+        return $this->getDisplayableName();
+    }
 }

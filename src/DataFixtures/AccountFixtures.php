@@ -47,6 +47,7 @@ class AccountFixtures extends Fixture implements DependentFixtureInterface
         $account->setDescription($account->getName());
         $account->setAmountCurrency(Currency::EUR);
         $account->setCreator($admin);
+        $account->addUser($user);
         $manager->persist($account);
 
         $account = new Account();
@@ -59,6 +60,7 @@ class AccountFixtures extends Fixture implements DependentFixtureInterface
         $account->setDescription($account->getName());
         $account->setAmountCurrency(Currency::EUR);
         $account->setCreator($admin);
+        $account->addUser($user);
         $manager->persist($account);
 
         $account = new Account();

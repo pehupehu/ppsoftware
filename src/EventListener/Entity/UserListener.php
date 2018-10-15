@@ -38,38 +38,40 @@ class UserListener
         $entity = $args->getEntity();
 
         if ($entity instanceof User) {
-            /** @var User $loggedUser */
-            $loggedUser = $this->tokenStorage->getToken()->getUser();
+            if ($this->tokenStorage->getToken()) {
+                /** @var User $loggedUser */
+                $loggedUser = $this->tokenStorage->getToken()->getUser();
 
-            $entityManager = $args->getEntityManager();
-            $uow = $entityManager->getUnitOfWork();
-            $changes = $uow->getEntityChangeSet($entity);
+                $entityManager = $args->getEntityManager();
+                $uow = $entityManager->getUnitOfWork();
+                $changes = $uow->getEntityChangeSet($entity);
 
-            $modified = [];
-            foreach ($this->getMonitored() as $key) {
-                if (!isset($changes[$key])) {
-                    continue;
+                $modified = [];
+                foreach ($this->getMonitored() as $key) {
+                    if (!isset($changes[$key])) {
+                        continue;
+                    }
+
+                    // Locale -> change locale session
+                    if ($key === 'locale' && $loggedUser === $entity) {
+                        $this->session->set('_locale', $entity->getLocale());
+                    }
+
+                    // TODO gérer integer/string/etc
+                    $modified[] = $key . ' ' . $changes[$key][0] . ' to ' . $changes[$key][1];
                 }
 
-                // Locale -> change locale session
-                if ($key === 'locale' && $loggedUser === $entity) {
-                    $this->session->set('_locale', $entity->getLocale());
+                if (!empty($modified)) {
+                    $userActivity = new UserActivity();
+                    $userActivity->setCreatedAt(new \DateTime());
+                    $userActivity->setLoggedUserId($loggedUser->getId());
+                    $userActivity->setLoggedUser($loggedUser);
+                    $userActivity->setUserId($entity->getId());
+                    $userActivity->setUser($entity);
+                    $userActivity->setType('USER_UPDATED');
+                    $userActivity->setLibelle(implode(', ', $modified));
+                    $this->logs[] = $userActivity;
                 }
-
-                // TODO gérer integer/string/etc
-                $modified[] = $key . ' ' . $changes[$key][0] . ' to ' . $changes[$key][1];
-            }
-
-            if (!empty($modified)) {
-                $userActivity = new UserActivity();
-                $userActivity->setCreatedAt(new \DateTime());
-                $userActivity->setLoggedUserId($loggedUser->getId());
-                $userActivity->setLoggedUser($loggedUser);
-                $userActivity->setUserId($entity->getId());
-                $userActivity->setUser($entity);
-                $userActivity->setType('USER_UPDATED');
-                $userActivity->setLibelle(implode(', ', $modified));
-                $this->logs[] = $userActivity;
             }
         }
     }
