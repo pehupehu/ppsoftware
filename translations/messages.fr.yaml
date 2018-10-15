@@ -121,6 +121,17 @@ financial:
                 new: Le type d'opération a été ajouté avec succès
                 edit: Le type d'opération a été modifié avec succès
                 remove: Le type d'opération a été supprimé avec succès
+    category:
+        field:
+            categorie: Catégorie
+            children: Sous catégorie
+        title:
+            debit: Dépenses
+            credit: Revenus
+        action:
+            new:
+                credit: Créer une nouvelle catégorie de revenus
+                debit: Créer une nouvelle catégorie de dépenses
 
 generic:
     field:

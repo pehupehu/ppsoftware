@@ -10,5 +10,29 @@ use Doctrine\ORM\EntityRepository;
  */
 class CategoryRepository extends EntityRepository
 {
+    public function loadCredit()
+    {
+        $query = $this->createQueryBuilder('p');
 
+        $query
+            ->leftJoin('p.children', 'c');
+
+        $query
+            ->where('p.credit = 1');
+
+        return $query->getQuery();
+    }
+
+    public function loadDebit()
+    {
+        $query = $this->createQueryBuilder('p');
+
+        $query
+            ->leftJoin('p.children', 'c');
+
+        $query
+            ->where('p.debit = 1');
+
+        return $query->getQuery();
+    }
 }

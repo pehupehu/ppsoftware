@@ -15,6 +15,9 @@ all:
       type_transaction:
         route: financial_type_transaction
         role: ROLE_USER
+      category:
+        route: financial_category
+        role: ROLE_USER
 
   admin:
     children:

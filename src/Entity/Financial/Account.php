@@ -21,12 +21,6 @@ class Account
     private $id;
 
     /**
-     * @ORM\Column(type="integer", options={"unsigned": true})
-     * @var integer
-     */
-    private $creator_id;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
      * @var User
@@ -34,23 +28,11 @@ class Account
     private $creator;
 
     /**
-     * @ORM\Column(type="integer", options={"unsigned": true})
-     * @var integer
-     */
-    private $type_of_account_id;
-
-    /**
      * @ORM\ManyToOne(targetEntity="TypeOfAccount")
      * @ORM\JoinColumn(name="type_of_account_id", referencedColumnName="id")
      * @var TypeOfAccount
      */
     private $typeOfAccount;
-
-    /**
-     * @ORM\Column(type="integer", options={"unsigned": true})
-     * @var integer
-     */
-    private $bank_id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Bank")
@@ -128,24 +110,6 @@ class Account
     }
 
     /**
-     * @return int
-     */
-    public function getCreatorId(): int
-    {
-        return $this->creator_id;
-    }
-
-    /**
-     * @param int $creator_id
-     * @return Account
-     */
-    public function setCreatorId(int $creator_id): Account
-    {
-        $this->creator_id = $creator_id;
-        return $this;
-    }
-
-    /**
      * @return User
      */
     public function getCreator(): User
@@ -164,24 +128,6 @@ class Account
     }
 
     /**
-     * @return int
-     */
-    public function getTypeOfAccountId(): int
-    {
-        return $this->type_of_account_id;
-    }
-
-    /**
-     * @param int $type_of_account_id
-     * @return Account
-     */
-    public function setTypeOfAccountId(int $type_of_account_id): Account
-    {
-        $this->type_of_account_id = $type_of_account_id;
-        return $this;
-    }
-
-    /**
      * @return TypeOfAccount
      */
     public function getTypeOfAccount(): TypeOfAccount
@@ -196,24 +142,6 @@ class Account
     public function setTypeOfAccount(TypeOfAccount $typeOfAccount): Account
     {
         $this->typeOfAccount = $typeOfAccount;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getBankId(): int
-    {
-        return $this->bank_id;
-    }
-
-    /**
-     * @param int $bank_id
-     * @return Account
-     */
-    public function setBankId(int $bank_id): Account
-    {
-        $this->bank_id = $bank_id;
         return $this;
     }
 

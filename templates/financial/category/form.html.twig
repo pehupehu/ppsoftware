@@ -1,0 +1,42 @@
+{% extends 'layout_small.html.twig' %}
+
+{% block title %}
+    {% if (form.vars.data.id) %}{{ 'financial.category.title.edit'|trans }}{% else %}{{ 'financial.category.title.new'|trans }}{% endif %}
+{% endblock title %}
+
+{% block container %}
+    <h2>{% if (form.vars.data.id) %}{{ 'financial.category.title.edit'|trans }}{% else %}{{ 'financial.category.title.new'|trans }}{% endif %}</h2>
+    <div class="card">
+        <div class="card-body">
+            {{ form_start(form) }}
+                {{ form_row(form.name, {
+                    'label': 'financial.category.field.category'
+                }) }}
+                <table data-prototype="{{ form_widget(form.childrens.vars.prototype)|e('html_attr') }}">
+                {% for children in form.childrens %}
+                    <tr>
+                        <td>
+                            {{ form_row(children.name, {
+                                'label': 'financial.category.field.children'
+                            }) }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </table>
+                {{ form_widget(form.back, {
+                    'label': 'generic.action.back',
+                    'attr': {
+                        'class': 'btn-secondary btn-sm',
+                        'onclick': ppboxRedirect(path('financial_category'))
+                    }
+                }) }}
+                {{ form_widget(form.save, {
+                    'label': 'generic.action.save',
+                    'attr': {
+                        'class': 'btn-primary btn-sm'
+                    }
+                }) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock container %}

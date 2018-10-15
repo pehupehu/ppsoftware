@@ -2,6 +2,7 @@
 
 namespace App\Entity\Financial;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,16 +20,16 @@ class Category
     private $id;
 
     /**
-     * @ORM\Column(type="integer", options={"unsigned": true})
-     * @var integer
+     * @ORM\Column(type="boolean")
+     * @var bool
      */
-    private $parent_id;
+    private $debit;
 
     /**
-     * @ORM\OneToOne(targetEntity="Category")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * @ORM\Column(type="boolean")
+     * @var bool
      */
-    private $parent;
+    private $credit;
 
     /**
      * @ORM\Column(type="string")
@@ -41,6 +42,19 @@ class Category
      * @var string
      */
     private $logo;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
+     * @var ArrayCollection
+     */
+    private $childrens;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="childrens")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * @var Category
+     */
+    private $parent;
 
     /**
      * @return int
@@ -61,38 +75,38 @@ class Category
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getParentId(): int
+    public function isDebit(): bool
     {
-        return $this->parent_id;
+        return $this->debit;
     }
 
     /**
-     * @param int $parent_id
+     * @param bool $debit
      * @return Category
      */
-    public function setParentId(int $parent_id): Category
+    public function setDebit(bool $debit): Category
     {
-        $this->parent_id = $parent_id;
+        $this->debit = $debit;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getParent()
+    public function isCredit(): bool
     {
-        return $this->parent;
+        return $this->credit;
     }
 
     /**
-     * @param mixed $parent
+     * @param bool $credit
      * @return Category
      */
-    public function setParent($parent)
+    public function setCredit(bool $credit): Category
     {
-        $this->parent = $parent;
+        $this->credit = $credit;
         return $this;
     }
 
@@ -129,6 +143,42 @@ class Category
     public function setLogo(string $logo): Category
     {
         $this->logo = $logo;
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getChildrens(): ArrayCollection
+    {
+        return $this->childrens;
+    }
+
+    /**
+     * @param ArrayCollection $childrens
+     * @return Category
+     */
+    public function setChildrens(ArrayCollection $childrens): Category
+    {
+        $this->childrens = $childrens;
+        return $this;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getParent(): Category
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param Category $parent
+     * @return Category
+     */
+    public function setParent(Category $parent): Category
+    {
+        $this->parent = $parent;
         return $this;
     }
 }

@@ -15,10 +15,22 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class User implements UserInterface, \Serializable
 {
+    /**
+     *
+     */
     const ROLE_ADMIN = 'ROLE_ADMIN';
+    /**
+     *
+     */
     const ROLE_USER = 'ROLE_USER';
 
+    /**
+     *
+     */
     const ACTIVE = 1;
+    /**
+     *
+     */
     const DISABLE = 0;
 
     /**
@@ -78,12 +90,6 @@ class User implements UserInterface, \Serializable
     private $createdAt;
 
     /**
-     * @ORM\Column(name="updated_at", type="datetime", options={"columnDefinition": "DATETIME DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP"})
-     * @var \DateTime
-     */
-    private $updatedAt;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Financial\Account", inversedBy="users")
      * @ORM\JoinTable(name="users_accounts")
      * @var ArrayCollection
@@ -103,6 +109,9 @@ class User implements UserInterface, \Serializable
         // $this->salt = md5(uniqid('', true));
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
@@ -118,11 +127,18 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getUsername(): ?string
     {
         return $this->username;
     }
 
+    /**
+     * @param string $username
+     * @return User
+     */
     public function setUsername(string $username): self
     {
         $this->username = $username;
@@ -130,11 +146,18 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
+    /**
+     * @param string $password
+     * @return User
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -142,11 +165,18 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getFirstname(): ?string
     {
         return $this->firstname;
     }
 
+    /**
+     * @param string $firstname
+     * @return User
+     */
     public function setFirstname(string $firstname): self
     {
         $this->firstname = $firstname;
@@ -154,11 +184,18 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getLastname(): ?string
     {
         return $this->lastname;
     }
 
+    /**
+     * @param string $lastname
+     * @return User
+     */
     public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
@@ -166,11 +203,18 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getRole(): ?string
     {
         return $this->role;
     }
 
+    /**
+     * @param string $role
+     * @return User
+     */
     public function setRole(string $role): self
     {
         $this->role = $role;
@@ -212,6 +256,10 @@ class User implements UserInterface, \Serializable
         return $this->isActive == self::ACTIVE;
     }
 
+    /**
+     * @param bool $isActive
+     * @return User
+     */
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
@@ -219,6 +267,9 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getSalt()
     {
         // you *may* need a real salt depending on your encoder
@@ -226,20 +277,32 @@ class User implements UserInterface, \Serializable
         return null;
     }
 
+    /**
+     *
+     */
     public function eraseCredentials()
     {
     }
 
+    /**
+     * @return bool
+     */
     public function isAccountNonExpired()
     {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function isAccountNonLocked()
     {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function isCredentialsNonExpired()
     {
         return true;
@@ -271,6 +334,9 @@ class User implements UserInterface, \Serializable
             ) = unserialize($serialized);
     }
 
+    /**
+     * @return array
+     */
     public static function getRolesChoices()
     {
         return [
@@ -279,31 +345,29 @@ class User implements UserInterface, \Serializable
         ];
     }
 
+    /**
+     * @return bool|null
+     */
     public function getIsActive(): ?bool
     {
         return $this->isActive === self::ACTIVE;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
+    /**
+     * @param \DateTimeInterface $createdAt
+     * @return User
+     */
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -416,6 +480,9 @@ class User implements UserInterface, \Serializable
         return $loggedUser->getId() === $this->getId();
     }
 
+    /**
+     * @return string
+     */
     public function getDisplayableName()
     {
         return ucfirst(strtolower($this->getFirstname())) . ' ' . strtoupper($this->getLastname());
