@@ -1,4 +1,4 @@
-{% extends 'layout_small.html.twig' %}
+{% extends 'layout_standard.html.twig' %}
 
 {% block title %}
 {% endblock title %}
@@ -21,16 +21,17 @@
             <button type="button" class="btn btn-sm btn-primary" onclick="{{ ppboxRedirect(path('financial_category_new', {'type': 'credit'})) }}">
                 <span class="oi oi-play-circle"></span> {{ 'financial.category.action.new.credit'|trans }}
             </button>
-            {% for category in categoriesCredit %}
-                {{ category }}
-            {% endfor %}
+            {% include 'financial/category/category.html.twig' with {'categories': categoriesCredit} %}
         </div>
         <div class="tab-pane fade" id="debit" role="tabpanel" aria-labelledby="debit-tab">
             <button type="button" class="btn btn-sm btn-primary" onclick="{{ ppboxRedirect(path('financial_category_new', {'type': 'debit'})) }}">
                 <span class="oi oi-play-circle"></span> {{ 'financial.category.action.new.debit'|trans }}
             </button>
-            {% for category in categoriesDebit %}
-            {% endfor %}
+            {% include 'financial/category/category.html.twig' with {'categories': categoriesDebit} %}
         </div>
     </div>
 {% endblock container %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/financial/category/list.js') }}"></script>
+{% endblock javascripts %}

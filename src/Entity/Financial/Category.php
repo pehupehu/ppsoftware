@@ -4,6 +4,7 @@ namespace App\Entity\Financial;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * @ORM\Table(name="categories")
@@ -159,7 +160,7 @@ class Category
     /**
      * @return ArrayCollection
      */
-    public function getChildrens(): ArrayCollection
+    public function getChildrens()
     {
         return $this->childrens;
     }
@@ -196,6 +197,14 @@ class Category
     {
         $this->childrens->removeElement($children);
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasChildrens(): bool 
+    {
+        return $this->childrens->count() > 0;
     }
 
     /**

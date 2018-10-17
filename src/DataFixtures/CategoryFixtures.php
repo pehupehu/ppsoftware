@@ -28,6 +28,8 @@ class CategoryFixtures extends Fixture
     {
         // Credit
 
+        // Offre de remboursement : Hp / Karcher / Samsung
+
         $category = new Category();
         $category->setCredit(true);
         $category->setName('Offre de remboursement');
@@ -48,8 +50,46 @@ class CategoryFixtures extends Fixture
         $category->addChildren($children);
 
         $manager->persist($category);
-        
+
+        // Remboursement santé : Assurance maladie / Mutuelle
+
+        $category = new Category();
+        $category->setCredit(true);
+        $category->setName('Remboursement santé');
+
+        $children = new Category();
+        $children->setName('Assurance maladie');
+        $manager->persist($children);
+        $category->addChildren($children);
+
+        $children = new Category();
+        $children->setName('Mutuelle');
+        $manager->persist($children);
+        $category->addChildren($children);
+
+        $manager->persist($category);
+
+        // Dépôt : Chèque / Espèce
+
+        $category = new Category();
+        $category->setCredit(true);
+        $category->setName('Dépôt');
+
+        $children = new Category();
+        $children->setName('Chèque');
+        $manager->persist($children);
+        $category->addChildren($children);
+
+        $children = new Category();
+        $children->setName('Espèce');
+        $manager->persist($children);
+        $category->addChildren($children);
+
+        $manager->persist($category);
+
         // Debit
+
+        // Supermarché : Leclerc / Auchan / Carrefour
 
         $category = new Category();
         $category->setDebit(true);
@@ -67,6 +107,24 @@ class CategoryFixtures extends Fixture
 
         $children = new Category();
         $children->setName('Carrefour');
+        $manager->persist($children);
+        $category->addChildren($children);
+
+        $manager->persist($category);
+
+        // Habitation : Prêt immobilier / Assurance prêt
+
+        $category = new Category();
+        $category->setDebit(true);
+        $category->setName('Habitation');
+
+        $children = new Category();
+        $children->setName('Prêt immobilier');
+        $manager->persist($children);
+        $category->addChildren($children);
+
+        $children = new Category();
+        $children->setName('Assurance prêt');
         $manager->persist($children);
         $category->addChildren($children);
 

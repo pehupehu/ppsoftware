@@ -18,7 +18,9 @@ class CategoryRepository extends EntityRepository
             ->leftJoin('p.childrens', 'c');
 
         $query
-            ->where('p.credit = 1');
+            ->where('p.credit = 1')
+            ->andWhere('p.parent IS NULL');
+        
 
         return $query->getQuery();
     }
@@ -31,7 +33,8 @@ class CategoryRepository extends EntityRepository
             ->leftJoin('p.childrens', 'c');
 
         $query
-            ->where('p.debit = 1');
+            ->where('p.debit = 1')
+            ->andWhere('p.parent IS NULL');
 
         return $query->getQuery();
     }
