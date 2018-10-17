@@ -15,7 +15,7 @@ class CategoryRepository extends EntityRepository
         $query = $this->createQueryBuilder('p');
 
         $query
-            ->leftJoin('p.children', 'c');
+            ->leftJoin('p.childrens', 'c');
 
         $query
             ->where('p.credit = 1');
@@ -28,7 +28,7 @@ class CategoryRepository extends EntityRepository
         $query = $this->createQueryBuilder('p');
 
         $query
-            ->leftJoin('p.children', 'c');
+            ->leftJoin('p.childrens', 'c');
 
         $query
             ->where('p.debit = 1');

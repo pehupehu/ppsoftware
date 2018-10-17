@@ -38,7 +38,7 @@ class Category
     private $name;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @var string
      */
     private $logo;
@@ -55,6 +55,14 @@ class Category
      * @var Category
      */
     private $parent;
+
+    /**
+     * Category constructor.
+     */
+    public function __construct()
+    {
+        $this->childrens = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * @return int
@@ -89,6 +97,7 @@ class Category
     public function setDebit(bool $debit): Category
     {
         $this->debit = $debit;
+        $this->credit = !$debit;
         return $this;
     }
 
@@ -107,6 +116,7 @@ class Category
     public function setCredit(bool $credit): Category
     {
         $this->credit = $credit;
+        $this->debit = !$credit;
         return $this;
     }
 
@@ -161,6 +171,30 @@ class Category
     public function setChildrens(ArrayCollection $childrens): Category
     {
         $this->childrens = $childrens;
+        return $this;
+    }
+
+    /**
+     * @param Category $children
+     * @return Category
+     */
+    public function addChildren(Category $children): Category
+    {
+        if (!$this->childrens->contains($children)) {
+            $children->setParent($this);
+            $children->setDebit($this->isDebit());
+            $this->childrens->add($children);
+        }
+        return $this;
+    }
+
+    /**
+     * @param Category $children
+     * @return Category
+     */
+    public function removeChildren(Category $children): Category
+    {
+        $this->childrens->removeElement($children);
         return $this;
     }
 
