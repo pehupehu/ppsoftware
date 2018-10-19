@@ -2,9 +2,6 @@
 $('.img-preview-form').on('click', function() {
     let row = $(this).parents('.img-preview-row');
 
-    console.log(row);
-    console.log(row.find('.img-preview-form-file'));
-
     row.find('.img-preview-form-file').trigger('click');
 });
 

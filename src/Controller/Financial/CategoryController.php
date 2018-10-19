@@ -13,9 +13,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Class CategoryController
@@ -89,4 +91,23 @@ class CategoryController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/financial/category/move/{children_id}/{parent_id}", name="financial_category_move")
+     *
+     * @ParamConverter("children", options={"id" = "children_id"})
+     * @ParamConverter("parent", options={"id" = "parent_id"})
+     * 
+     * @param Category $children
+     * @param Category $parent
+     * 
+     * @return Response
+     */
+    public function move(Category $children, Category $parent): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $parent->addChildren($children);
+        $entityManager->flush();
+
+        return new Response('ok', Response::HTTP_OK);
+    }
 }

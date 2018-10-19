@@ -1,13 +1,15 @@
 <div class="row">
     {% for category in categories %}
         <div class="col-2">
-            <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action active category-droppable">
+            <div class="list-group parent-droppable small" data-parent-id="{{ category.id }}">
+                <a href="#" class="list-group-item list-group-item-action active">
                     {{ category.name }}
                 </a>
-                {% for children in category.childrens %}
-                    <a href="#" class="list-group-item list-group-item-action category-draggable">{{ children.name }}</a>
-                {% endfor %}
+                <div class="childrens">
+                    {% for children in category.childrens %}
+                        <a href="#" class="list-group-item list-group-item-action children-draggable" data-children-id="{{ children.id }}">{{ children.name }}</a>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     {% endfor %}

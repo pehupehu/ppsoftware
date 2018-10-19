@@ -20,7 +20,9 @@ class CategoryRepository extends EntityRepository
         $query
             ->where('p.credit = 1')
             ->andWhere('p.parent IS NULL');
-        
+
+        $query
+            ->orderBy('p.name, c.name');
 
         return $query->getQuery();
     }
@@ -35,6 +37,9 @@ class CategoryRepository extends EntityRepository
         $query
             ->where('p.debit = 1')
             ->andWhere('p.parent IS NULL');
+
+        $query
+            ->orderBy('p.name, c.name');
 
         return $query->getQuery();
     }

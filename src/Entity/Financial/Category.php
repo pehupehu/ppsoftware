@@ -46,6 +46,7 @@ class Category
 
     /**
      * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
+     * @ORM\OrderBy({"name" = "ASC"})
      * @var ArrayCollection
      */
     private $childrens;

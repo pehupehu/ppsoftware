@@ -128,10 +128,19 @@ financial:
         title:
             debit: Dépenses
             credit: Revenus
+            move: Catégorie
         action:
             new:
                 credit: Créer une nouvelle catégorie de revenus
                 debit: Créer une nouvelle catégorie de dépenses
+        message:
+            success:
+                new: La catégorie a été ajoutée avec succès
+                edit: La catégorie a été modifiée avec succès
+                remove: La catégorie a été supprimée avec succès
+                move: La catégorie a été déplacée avec succès
+            warning:
+                move: La catégorie n'a pas pu être déplacée
 
 generic:
     field:

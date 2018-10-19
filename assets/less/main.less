@@ -56,11 +56,6 @@
   color: white;
 }
 
-.ui-dialog-content, .ui-widget-content {
-  padding-top: 15px!important;
-  padding-bottom: 15px!important;
-}
-
 .ui-dialog-buttonset>.btn {
   padding: 2px;
 }
@@ -120,6 +115,21 @@
   background-color: #fff;
   border: 1px solid #dee2e6;
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, .05);
+}
+
+#financial-category-list {
+  .parent-droppable {
+    display:block;
+    width:100%;
+    height: 200px;
+    overflow-y:auto;
+  }
+  .list-group-item {
+    padding: 3px;
+  }
+  .tab-pane-credit, .tab-pane-debit {
+    margin-top: 5px;
+  }
 }
 
 .order-selected {
