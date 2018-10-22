@@ -11,9 +11,19 @@
                             <a class="text-white" href="{{ path('financial_category_edit', {'id': category.id}) }}">
                                 <span class="oi oi-pencil"></span>
                             </a>
-                            <a class="text-white" href="{{ path('financial_category_remove', {'id': category.id}) }}">
-                                <span class="oi oi-trash"></span>
-                            </a>
+                            {% if category.canBeRemove %}
+                                <a class="text-white ppboxconfirm" href="#"
+                                        data-ppbox-id="{{ 'dialogRemove' }}"
+                                        data-ppbox-theme="danger"
+                                        data-ppbox-width="sm"
+                                        data-ppbox-title="{{ 'generic.diag_confirm.title'|trans }}"
+                                        data-ppbox-body="{{ 'generic.diag_confirm.message'|trans }}"
+                                        data-ppbox-button1="{{ {text: 'generic.diag_confirm.confirm'|trans, redirect: path('financial_category_remove', {'id': category.id}) }|json_encode() }}"
+                                        data-ppbox-button2="{{ {text: 'generic.diag_confirm.cancel'|trans }|json_encode() }}"
+                                >
+                                    <span class="oi oi-trash"></span>
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
