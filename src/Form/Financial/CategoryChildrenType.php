@@ -33,7 +33,8 @@ class CategoryChildrenType extends AbstractType
     {
         $builder
             ->add('name', null, [
-                'required' => true,
+                'required' => false,
+                'empty_data' => ''
             ]);
     }
 }

@@ -109,10 +109,14 @@ class CategoryController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
 
             foreach ($category->getChildrens() as $children) {
-                $children->setCredit($category->isCredit());
-                $children->setLogo('');
-                $children->setParent($category);
-                $entityManager->persist($children);
+                if (!empty($children->getName())) {
+                    $children->setCredit($category->isCredit());
+                    $children->setLogo('');
+                    $children->setParent($category);
+                    $entityManager->persist($children);
+                } else {
+                    $entityManager->remove($children);
+                }
             }
 
             $entityManager->persist($category);
