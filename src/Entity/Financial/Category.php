@@ -125,7 +125,7 @@ class Category
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }
@@ -143,7 +143,7 @@ class Category
     /**
      * @return string
      */
-    public function getLogo(): string
+    public function getLogo()
     {
         return $this->logo;
     }
@@ -159,7 +159,7 @@ class Category
     }
 
     /**
-     * @return ArrayCollection
+     * @return Category[]|ArrayCollection
      */
     public function getChildrens()
     {
@@ -224,5 +224,30 @@ class Category
     {
         $this->parent = $parent;
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canBeRemove()
+    {
+        // TODO
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function remove()
+    {
+        if ($this->canBeRemove()) {
+            foreach($this->getChildrens() as $children) {
+                if (!$children->remove()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

@@ -34,8 +34,6 @@ class CategoryChildrenType extends AbstractType
         $builder
             ->add('name', null, [
                 'required' => true,
-            ])
-            ->add('back', ButtonType::class)
-            ->add('save', SubmitType::class);
+            ]);
     }
 }

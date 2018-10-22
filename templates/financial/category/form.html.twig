@@ -5,38 +5,59 @@
 {% endblock title %}
 
 {% block container %}
-    <h2>{% if (form.vars.data.id) %}{{ 'financial.category.title.edit'|trans }}{% else %}{{ 'financial.category.title.new'|trans }}{% endif %}</h2>
-    <div class="card">
-        <div class="card-body">
+    <div id="financial-category-form">
+        <h2>{% if (form.vars.data.id) %}{{ 'financial.category.title.edit'|trans }}{% else %}{{ 'financial.category.title.new'|trans }}{% endif %}</h2>
+        <div class="card">
             {{ form_start(form) }}
-                {{ form_row(form.name, {
-                    'label': 'financial.category.field.category'
-                }) }}
-                <table data-prototype="{{ form_widget(form.childrens.vars.prototype)|e('html_attr') }}">
-                {% for children in form.childrens %}
-                    <tr>
-                        <td>
-                            {{ form_row(children.name, {
-                                'label': 'financial.category.field.children'
-                            }) }}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </table>
-                {{ form_widget(form.back, {
-                    'label': 'generic.action.back',
-                    'attr': {
-                        'class': 'btn-secondary btn-sm',
-                        'onclick': ppboxRedirect(path('financial_category'))
-                    }
-                }) }}
-                {{ form_widget(form.save, {
-                    'label': 'generic.action.save',
-                    'attr': {
-                        'class': 'btn-primary btn-sm'
-                    }
-                }) }}
-            {{ form_end(form) }}
+                {{ form_widget(form._token) }}
+                <div class="card-header">
+                    {{ 'financial.category.field.category'|trans }}
+                </div>
+                <div class="card-body">
+                    {{ form_widget(form.name) }}
+                </div>
+                <div class="card-header">
+                    {{ 'financial.category.field.childrens'|trans }}
+                    <a href="#" id="add-children"><span class="oi oi-plus"></span> {{ 'generic.action.add'|trans }}</a>
+                </div>
+                <div class="card-body card-childrens">
+                    <table class="table table-borderless">
+                        <tbody class="childrens" data-index="{{ form.childrens|length }}" data-prototype="
+                        {% filter escape %}
+                            {{ include('financial/category/prototype_children.html.twig', { 'children': form.childrens.vars.prototype }) }}
+                        {% endfilter %}">
+                            {% for children in form.childrens %}
+                                <tr>
+                                    <td>
+                                        {{ form_widget(children.name, {
+                                            'label': 'financial.category.field.children'
+                                        }) }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-body">
+                    {{ form_widget(form.back, {
+                        'label': 'generic.action.back',
+                        'attr': {
+                            'class': 'btn-secondary btn-sm',
+                            'onclick': ppboxRedirect(path('financial_category'))
+                        }
+                    }) }}
+                    {{ form_widget(form.save, {
+                        'label': 'generic.action.save',
+                        'attr': {
+                            'class': 'btn-primary btn-sm'
+                        }
+                    }) }}
+                </div>
+            {{ form_end(form, {'render_rest': false}) }}
         </div>
     </div>
 {% endblock container %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/financial/category/form.js') }}"></script>
+{% endblock javascripts %}

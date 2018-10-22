@@ -2,18 +2,12 @@
 
 namespace App\Controller\Financial;
 
-use App\Entity\Financial\Account;
 use App\Entity\Financial\Category;
-use App\Entity\User;
 use App\Form\Financial\CategoryType;
 use App\Repository\Financial\CategoryRepository;
 use App\Tools\FlashBagTranslator;
-use App\Tools\Pager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
-use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -73,12 +67,16 @@ class CategoryController extends AbstractController
             /** @var Category $category */
             $category = $form->getData();
 
-            dump($form);
-
-            die();
-
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($bank);
+
+            foreach ($category->getChildrens() as $children) {
+                $children->setCredit($category->isCredit());
+                $children->setLogo('');
+                $children->setParent($category);
+                $entityManager->persist($children);
+            }
+
+            $entityManager->persist($category);
             $entityManager->flush();
 
             $flashBagTranslator->add('success', 'financial.category.message.success.new.' . $type);
@@ -92,7 +90,73 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @Route("/financial/category/move/{children_id}/{parent_id}", name="financial_category_move")
+     * @Route("/financial/category/{id}/edit", name="financial_category_edit")
+     *
+     * @param Request $request
+     * @param Category $category
+     * @param FlashBagTranslator $flashBagTranslator
+     *
+     * @return Response
+     */
+    public function edit(Request $request, Category $category, FlashBagTranslator $flashBagTranslator): Response
+    {
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Category $category */
+            $category = $form->getData();
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            foreach ($category->getChildrens() as $children) {
+                $children->setCredit($category->isCredit());
+                $children->setLogo('');
+                $children->setParent($category);
+                $entityManager->persist($children);
+            }
+
+            $entityManager->persist($category);
+            $entityManager->flush();
+
+            $flashBagTranslator->add('success', 'financial.category.message.success.edit');
+
+            return $this->redirectToRoute('financial_category');
+        }
+
+        return $this->render('financial/category/form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/financial/category/{id}/remove", name="financial_category_remove")
+     *
+     * @param FlashBagTranslator $flashBagTranslator
+     * @param Category $category
+     *
+     * @return Response
+     */
+    public function remove(Category $category, FlashBagTranslator $flashBagTranslator): Response
+    {
+        if ($category->remove()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            foreach ($category->getChildrens() as $children) {
+                $entityManager->remove($children);
+            }
+            $entityManager->flush();
+            $entityManager->remove($category);
+            $entityManager->flush();
+
+            $flashBagTranslator->add('success', 'financial.category.message.success.remove');
+        } else {
+            $flashBagTranslator->add('warning', 'financial.category.message.warning.remove');
+        }
+
+        return $this->redirectToRoute('financial_category');
+    }
+
+    /**
+     * @Route("/financial/category/{children_id}/{parent_id}", name="financial_category_move")
      *
      * @ParamConverter("children", options={"id" = "children_id"})
      * @ParamConverter("parent", options={"id" = "parent_id"})

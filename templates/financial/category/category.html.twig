@@ -2,9 +2,21 @@
     {% for category in categories %}
         <div class="col-2">
             <div class="list-group parent-droppable small" data-parent-id="{{ category.id }}">
-                <a href="#" class="list-group-item list-group-item-action active">
-                    {{ category.name }}
-                </a>
+                <div class="list-group-item list-group-item-action active">
+                    <div class="row m-0">
+                        <div class="col-8 pl-0">
+                            {{ category.name }}
+                        </div>
+                        <div class="col-4 pr-0 text-right">
+                            <a class="text-white" href="{{ path('financial_category_edit', {'id': category.id}) }}">
+                                <span class="oi oi-pencil"></span>
+                            </a>
+                            <a class="text-white" href="{{ path('financial_category_remove', {'id': category.id}) }}">
+                                <span class="oi oi-trash"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <div class="childrens">
                     {% for children in category.childrens %}
                         <a href="#" class="list-group-item list-group-item-action children-draggable" data-children-id="{{ children.id }}">{{ children.name }}</a>

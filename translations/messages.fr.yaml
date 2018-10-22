@@ -9,6 +9,7 @@ navbar:
     type_account: Types de comptes
     account: Comptes
     type_transaction: Types d'opérations
+    category: Catégories
 
 admin:
     title: Administration
@@ -123,8 +124,9 @@ financial:
                 remove: Le type d'opération a été supprimé avec succès
     category:
         field:
-            categorie: Catégorie
+            category: Catégorie
             children: Sous catégorie
+            childrens: Sous catégories
         title:
             debit: Dépenses
             credit: Revenus
@@ -154,6 +156,7 @@ generic:
         resolve_overwrite: Remplacer
         resolve_skip: Passer
     action:
+        add: Ajouter
         edit: Modifier
         choose: Choisissez
         disable: Désactiver
