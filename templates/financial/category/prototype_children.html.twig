@@ -1,15 +1,29 @@
-<tr>
-    <td>
-        {{ form_widget(children.name, {
-            'label': 'financial.category.field.children',
-            'attr': {
-                'class': 'form-control-sm'
-            }
-        }) }}
-    </td>
-    <td>
-        <a href="#" class="text-danger">
+<div class="form-row row-children">
+    <div class="img-preview-row col-3">
+        <img class="img-preview-form img-thumbnail img-fluid"
+             title="{% if (index is defined) %}{{ 'generic.field.clic_to_modify'|trans }}{% else %}{{ 'generic.field.clic_to_add'|trans }}{% endif %}"
+             src="{% if (index is defined and form.vars.data.childrens[index].logo) %}{{ asset(app_category_logo_dir ~ '/' ~ form.vars.data.childrens[index].logo) }}{% endif %}"
+        >
+        <div class="d-none">
+            {{ form_row(children.file, {
+                'label': 'generic.field.logo',
+                'attr': {
+                    'class': 'img-preview-form-file'
+                }
+            }) }}
+        </div>
+    </div>
+    <div class="col-8">
+    {{ form_widget(children.name, {
+        'label': 'financial.category.field.children',
+        'attr': {
+            'class': 'form-control-sm'
+        }
+    }) }}
+    </div>
+    <div class="col-1">
+        <a href="#" class="del-children text-danger">
             <span class="oi oi-x"></span>
         </a>
-    </td>
-</tr>
+    </div>
+</div>

@@ -21,22 +21,14 @@
                     <a href="#" id="add-children"><span class="oi oi-plus"></span> {{ 'generic.action.add'|trans }}</a>
                 </div>
                 <div class="card-body card-childrens">
-                    <table class="table table-borderless">
-                        <tbody class="childrens" data-index="{{ form.childrens|length }}" data-prototype="
+                    <div class="childrens" data-index="{{ form.childrens|length }}" data-prototype="
                         {% filter escape %}
                             {{ include('financial/category/prototype_children.html.twig', { 'children': form.childrens.vars.prototype }) }}
                         {% endfilter %}">
-                            {% for children in form.childrens %}
-                                <tr>
-                                    <td>
-                                        {{ form_widget(children.name, {
-                                            'label': 'financial.category.field.children'
-                                        }) }}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                        {% for index, children in form.childrens %}
+                            {{ include('financial/category/prototype_children.html.twig', { 'children': children, 'index': index }) }}
+                        {% endfor %}
+                    </div>
                 </div>
                 <div class="card-body">
                     {{ form_widget(form.back, {

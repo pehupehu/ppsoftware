@@ -12,7 +12,10 @@
                 <div class="form-row">
                     <div class="img-preview-row col-3">
                         {{ form_label(form.file, 'generic.field.logo') }}
-                        <img class="img-preview-form img-thumbnail img-fluid" title="{% if (form.vars.data.logo) %}{{ 'generic.field.clic_to_modify'|trans }}{% else %}{{ 'generic.field.clic_to_add'|trans }}{% endif %}" src="{% if (form.vars.data.logo) %}{{ asset(app_bank_logo_dir ~ '/' ~ form.vars.data.logo) }}{% endif %}">
+                        <img class="img-preview-form img-thumbnail img-fluid"
+                             title="{% if (form.vars.data.logo) %}{{ 'generic.field.clic_to_modify'|trans }}{% else %}{{ 'generic.field.clic_to_add'|trans }}{% endif %}"
+                             src="{% if (form.vars.data.logo) %}{{ asset(app_bank_logo_dir ~ '/' ~ form.vars.data.logo) }}{% endif %}"
+                        >
                         <div class="d-none">
                             {{ form_row(form.file, {
                                 'label': 'generic.field.logo',

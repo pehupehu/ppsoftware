@@ -6,3 +6,4 @@ twig:
         - 'bootstrap_4_layout.html.twig'
     globals:
         app_bank_logo_dir: '%app.bank_logo_dir%'
+        app_category_logo_dir: '%app.category_logo_dir%'

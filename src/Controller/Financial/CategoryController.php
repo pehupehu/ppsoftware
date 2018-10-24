@@ -8,6 +8,9 @@ use App\Repository\Financial\CategoryRepository;
 use App\Tools\FlashBagTranslator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -100,6 +103,13 @@ class CategoryController extends AbstractController
      */
     public function edit(Request $request, Category $category, FlashBagTranslator $flashBagTranslator): Response
     {
+        $oldChildrens = new ArrayCollection();
+
+        // Create an ArrayCollection of the current Tag objects in the database
+        foreach ($category->getChildrens() as $children) {
+            $oldChildrens->add($children);
+        }
+
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -108,15 +118,37 @@ class CategoryController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
 
-            foreach ($category->getChildrens() as $children) {
-                if (!empty($children->getName())) {
-                    $children->setCredit($category->isCredit());
-                    $children->setLogo('');
-                    $children->setParent($category);
-                    $entityManager->persist($children);
-                } else {
+            foreach ($oldChildrens as $children) {
+                if (!$category->getChildrens()->contains($children)) {
+                    $category->removeChildren($children);
                     $entityManager->remove($children);
                 }
+            }
+            /** @var Form $child */
+            foreach ($form['childrens'] as $child) {
+                $children = $child->getData();
+                $file = $child['file']->getNormData();
+                if ($file) {
+                    $fileName = strtolower($children->getName()) . '.' . $file->guessExtension();
+
+                    try {
+                        $file->move(
+                            $this->getParameter('app.public_dir') . DIRECTORY_SEPARATOR . $this->getParameter('app.category_logo_dir'),
+                            $fileName
+                        );
+
+                        $children->setLogo($fileName);
+                    } catch (FileException $e) {
+                        $flashBagTranslator->add('warning', 'financial.category.message.warning.edit');
+
+                        return $this->redirectToRoute('financial_category');
+                    }
+                }
+
+                $children->setCredit($category->isCredit());
+                $children->setParent($category);
+                $category->addChildren($children);
+                $entityManager->persist($children);
             }
 
             $entityManager->persist($category);

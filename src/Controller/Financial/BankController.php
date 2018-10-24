@@ -69,7 +69,7 @@ class BankController extends AbstractController
 
                 try {
                     $file->move(
-                        $this->getParameter('app.public_dir' . DIRECTORY_SEPARATOR . 'app.bank_logo_dir'),
+                        $this->getParameter('app.public_dir') . DIRECTORY_SEPARATOR . $this->getParameter('app.bank_logo_dir'),
                         $fileName
                     );
 
