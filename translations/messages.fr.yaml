@@ -131,6 +131,7 @@ financial:
             debit: Dépenses
             credit: Revenus
             move: Catégorie
+            edit: Modifier une catégorie
         action:
             new:
                 credit: Créer une nouvelle catégorie de revenus

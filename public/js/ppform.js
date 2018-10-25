@@ -1,11 +1,18 @@
 
-$('.img-preview-form').on('click', function() {
+$('.img-preview-edit-file').on('click', function() {
     let row = $(this).parents('.img-preview-row');
 
-    row.find('.img-preview-form-file').trigger('click');
+    row.find('.img-preview-form-input-file').trigger('click');
 });
 
-$('.img-preview-form-file').on('change', function(evt) {
+$('.img-preview-remove-file').on('click', function() {
+    let row = $(this).parents('.img-preview-row');
+
+    row.find('.img-preview-form-remove-file').val(1);
+    row.find('.img-preview').attr('src', '/data/blank.png');
+});
+
+$('.img-preview-form-input-file').on('change', function(evt) {
     let row = $(this).parents('.img-preview-row'),
         files = evt.target.files,
         f = files[0],
@@ -13,7 +20,8 @@ $('.img-preview-form-file').on('change', function(evt) {
 
     reader.onload = (function() {
         return function(e) {
-            row.find('.img-preview-form').prop('src', e.target.result);
+            row.find('.img-preview').prop('src', e.target.result);
+            row.find('.img-preview-form-remove-file').val(0);
         };
     })(f);
 

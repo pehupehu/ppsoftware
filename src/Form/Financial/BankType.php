@@ -7,6 +7,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -44,6 +45,10 @@ class BankType extends AbstractType
                 'required' => true,
             ])
             ->add('file', FileType::class, [
+                'required' => false,
+                'mapped' => false,
+            ])
+            ->add('remove_file', HiddenType::class, [
                 'required' => false,
                 'mapped' => false,
             ])

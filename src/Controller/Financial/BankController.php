@@ -64,7 +64,9 @@ class BankController extends AbstractController
 
             /** @var UploadedFile $file */
             $file = $form['file']->getData();
-            if ($file) {
+            if ($form['remove_file']->getNormData()) {
+                $bank->setLogo('');
+            } elseif ($file) {
                 $fileName = strtolower($bank->getSurname()) . '.' . $file->guessExtension();
 
                 try {
@@ -114,7 +116,9 @@ class BankController extends AbstractController
 
             /** @var UploadedFile $file */
             $file = $form['file']->getData();
-            if ($file) {
+            if ($form['remove_file']->getNormData()) {
+                $bank->setLogo('');
+            } elseif ($file) {
                 $fileName = strtolower($bank->getSurname()) . '.' . $file->guessExtension();
 
                 try {

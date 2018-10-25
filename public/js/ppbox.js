@@ -86,6 +86,10 @@ class PPbox {
             button.click = function () {
                 PPbox.redirect(button.redirect);
             };
+        } else if (button.callback !== undefined) {
+            button.click = function () {
+                // TODO
+            };
         } else {
             button.click = function () {
                 PPbox._closeDialog(id);

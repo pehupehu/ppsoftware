@@ -21,7 +21,7 @@
                     <a href="#" id="add-children"><span class="oi oi-plus"></span> {{ 'generic.action.add'|trans }}</a>
                 </div>
                 <div class="card-body card-childrens">
-                    <div class="childrens" data-index="{{ form.childrens|length }}" data-prototype="
+                    <div class="row childrens" data-index="{{ form.childrens|length }}" data-prototype="
                         {% filter escape %}
                             {{ include('financial/category/prototype_children.html.twig', { 'children': form.childrens.vars.prototype }) }}
                         {% endfilter %}">

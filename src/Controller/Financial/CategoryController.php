@@ -72,10 +72,33 @@ class CategoryController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
 
-            foreach ($category->getChildrens() as $children) {
+            /** @var Form $child */
+            foreach ($form['childrens'] as $child) {
+                $children = $child->getData();
                 $children->setCredit($category->isCredit());
-                $children->setLogo('');
+                $file = $child['file']->getNormData();
+                if ($child['remove_file']->getNormData()) {
+                    $children->setLogo('');
+                } elseif ($file) {
+                    $fileName = strtolower($children->getName()) . '.' . $file->guessExtension();
+
+                    try {
+                        $file->move(
+                            $this->getParameter('app.public_dir') . DIRECTORY_SEPARATOR . $this->getParameter('app.category_logo_dir'),
+                            $fileName
+                        );
+
+                        $children->setLogo($fileName);
+                    } catch (FileException $e) {
+                        $flashBagTranslator->add('warning', 'financial.category.message.warning.new');
+
+                        return $this->redirectToRoute('financial_category');
+                    }
+                }
+
+                $children->setCredit($category->isCredit());
                 $children->setParent($category);
+                $category->addChildren($children);
                 $entityManager->persist($children);
             }
 
@@ -128,7 +151,9 @@ class CategoryController extends AbstractController
             foreach ($form['childrens'] as $child) {
                 $children = $child->getData();
                 $file = $child['file']->getNormData();
-                if ($file) {
+                if ($child['remove_file']->getNormData()) {
+                    $children->setLogo('');
+                } elseif ($file) {
                     $fileName = strtolower($children->getName()) . '.' . $file->guessExtension();
 
                     try {
