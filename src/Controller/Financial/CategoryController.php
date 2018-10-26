@@ -27,7 +27,7 @@ class CategoryController extends AbstractController
      *
      * @return Response
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
         /** @var CategoryRepository $categoryRepo */
         $categoryRepo = $this->getDoctrine()->getRepository(Category::class);
@@ -37,6 +37,7 @@ class CategoryController extends AbstractController
         return $this->render('financial/category/list.html.twig', [
             'categoriesCredit' => $categoriesCredit,
             'categoriesDebit' => $categoriesDebit,
+            'tab' => $request->get('tab', 'credit'),
         ]);
     }
 
@@ -69,6 +70,7 @@ class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Category $category */
             $category = $form->getData();
+            $tab = $category->isCredit() ? 'credit' : 'debit';
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -92,7 +94,7 @@ class CategoryController extends AbstractController
                     } catch (FileException $e) {
                         $flashBagTranslator->add('warning', 'financial.category.message.warning.new');
 
-                        return $this->redirectToRoute('financial_category');
+                        return $this->redirectToRoute('financial_category', ['tab' => $tab]);
                     }
                 }
 
@@ -107,7 +109,7 @@ class CategoryController extends AbstractController
 
             $flashBagTranslator->add('success', 'financial.category.message.success.new.' . $type);
 
-            return $this->redirectToRoute('financial_category');
+            return $this->redirectToRoute('financial_category', ['tab' => $tab]);
         }
 
         return $this->render('financial/category/form.html.twig', [
@@ -138,6 +140,7 @@ class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Category $category */
             $category = $form->getData();
+            $tab = $category->isCredit() ? 'credit' : 'debit';
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -166,7 +169,7 @@ class CategoryController extends AbstractController
                     } catch (FileException $e) {
                         $flashBagTranslator->add('warning', 'financial.category.message.warning.edit');
 
-                        return $this->redirectToRoute('financial_category');
+                        return $this->redirectToRoute('financial_category', ['tab' => $tab]);
                     }
                 }
 
@@ -181,7 +184,7 @@ class CategoryController extends AbstractController
 
             $flashBagTranslator->add('success', 'financial.category.message.success.edit');
 
-            return $this->redirectToRoute('financial_category');
+            return $this->redirectToRoute('financial_category', ['tab' => $tab]);
         }
 
         return $this->render('financial/category/form.html.twig', [
@@ -199,6 +202,8 @@ class CategoryController extends AbstractController
      */
     public function remove(Category $category, FlashBagTranslator $flashBagTranslator): Response
     {
+        $tab = $category->isCredit() ? 'credit' : 'debit';
+
         if ($category->remove()) {
             $entityManager = $this->getDoctrine()->getManager();
             foreach ($category->getChildrens() as $children) {
@@ -213,7 +218,7 @@ class CategoryController extends AbstractController
             $flashBagTranslator->add('warning', 'financial.category.message.warning.remove');
         }
 
-        return $this->redirectToRoute('financial_category');
+        return $this->redirectToRoute('financial_category', ['tab' => $tab]);
     }
 
     /**
