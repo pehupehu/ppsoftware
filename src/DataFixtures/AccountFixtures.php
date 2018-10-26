@@ -45,7 +45,7 @@ class AccountFixtures extends Fixture implements DependentFixtureInterface
         $account->setInitialBalance(0);
         $account->setCurrentBalance(0);
         $account->setDescription($account->getName());
-        $account->setAmountCurrency(Currency::EUR);
+        $account->setBalanceCurrency(Currency::EUR);
         $account->setCreator($admin);
         $account->addUser($user);
         $manager->persist($account);
@@ -58,7 +58,7 @@ class AccountFixtures extends Fixture implements DependentFixtureInterface
         $account->setInitialBalance(0);
         $account->setCurrentBalance(0);
         $account->setDescription($account->getName());
-        $account->setAmountCurrency(Currency::EUR);
+        $account->setBalanceCurrency(Currency::EUR);
         $account->setCreator($admin);
         $account->addUser($user);
         $manager->persist($account);
@@ -71,7 +71,7 @@ class AccountFixtures extends Fixture implements DependentFixtureInterface
         $account->setInitialBalance(0);
         $account->setCurrentBalance(0);
         $account->setDescription($account->getName());
-        $account->setAmountCurrency(Currency::EUR);
+        $account->setBalanceCurrency(Currency::EUR);
         $account->setCreator($admin);
         $manager->persist($account);
 
@@ -83,7 +83,7 @@ class AccountFixtures extends Fixture implements DependentFixtureInterface
         $account->setInitialBalance(0);
         $account->setCurrentBalance(0);
         $account->setDescription($account->getName());
-        $account->setAmountCurrency(Currency::EUR);
+        $account->setBalanceCurrency(Currency::EUR);
         $account->setCreator($user);
         $manager->persist($account);
 

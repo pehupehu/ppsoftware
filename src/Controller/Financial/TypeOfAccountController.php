@@ -29,7 +29,7 @@ class TypeOfAccountController extends AbstractController
     {
         /** @var TypeOfAccountRepository $typeOfAccountRepo */
         $typeOfAccountRepo = $this->getDoctrine()->getRepository(TypeOfAccount::class);
-        $pager = new Pager($typeOfAccountRepo->loadTypes());
+        $pager = new Pager($typeOfAccountRepo->getTypesQuery());
         $pager->setPage($request->get('page', 1));
         $pager->setRouteName('financial_type_account');
 

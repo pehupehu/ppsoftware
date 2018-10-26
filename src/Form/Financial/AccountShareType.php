@@ -5,6 +5,7 @@ namespace App\Form\Financial;
 use App\Entity\Financial\Account;
 use App\Entity\User;
 use App\Form\EntityManagerType;
+use App\Repository\Financial\AccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -41,6 +42,7 @@ class AccountShareType extends EntityManagerType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var AccountRepository $accountRepo */
         $accountRepo = $this->entityManager->getRepository(Account::class);
 
         /** @var Account $account */
@@ -62,12 +64,6 @@ class AccountShareType extends EntityManagerType
             $allChoices[] = $user;
             $allowedChoicesAttr[] = ['share' => 'unallowed'];
         }
-
-        dump($unallowedChoices);
-        dump($allowedChoices);
-
-        dump($unallowedChoicesAttr);
-        dump($allowedChoicesAttr);
 
         $builder
             ->add('unallowed', ChoiceType::class, [

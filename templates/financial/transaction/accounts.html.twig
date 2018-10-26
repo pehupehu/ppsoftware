@@ -1,0 +1,33 @@
+{% extends 'layout_small.html.twig' %}
+
+{% block title %}
+    {{ 'financial.transaction.title.accounts'|trans }}
+{% endblock title %}
+
+{% block container %}
+
+    <div class="row">
+        {% for account in accounts %}
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header">
+                        {% if account.bank.logo %}
+                            <img class="img-thumbnail" height="50px" width="50px" src="{{ asset(app_bank_logo_dir ~ '/' ~ account.bank.logo) }}">
+                        {% endif %}
+                        {{ account.typeOfAccount.name }}
+                    </div>
+                    {% if account.getLastTransactions()|length %}
+                    <div class="card-body">
+                        {% for transaction in account.getLastTransactions() %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div class="card-footer text-right">
+                        {{ account.currentBalance|localizedcurrency(account.balanceCurrency) }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>         
+
+{% endblock container %}

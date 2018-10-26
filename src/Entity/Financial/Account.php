@@ -3,6 +3,7 @@
 namespace App\Entity\Financial;
 
 use App\Entity\User;
+use App\Repository\Financial\TransactionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -75,7 +76,7 @@ class Account
      * @ORM\Column(type="string")
      * @var string
      */
-    private $amount_currency;
+    private $balance_currency;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="accounts")
@@ -124,6 +125,7 @@ class Account
     public function setCreator(User $creator): Account
     {
         $this->creator = $creator;
+        $this->addUser($creator);
         return $this;
     }
 
@@ -256,18 +258,18 @@ class Account
     /**
      * @return string
      */
-    public function getAmountCurrency(): string
+    public function getBalanceCurrency(): string
     {
-        return $this->amount_currency;
+        return $this->balance_currency;
     }
 
     /**
-     * @param string $amount_currency
+     * @param string $balance_currency
      * @return Account
      */
-    public function setAmountCurrency(string $amount_currency): Account
+    public function setBalanceCurrency(string $balance_currency): Account
     {
-        $this->amount_currency = $amount_currency;
+        $this->balance_currency = $balance_currency;
         return $this;
     }
 
@@ -294,7 +296,6 @@ class Account
     public function addUser(User $user): Account
     {
         if (!$this->getUsersCollection()->contains($user)) {
-            dump($user);
             $this->getUsersCollection()->add($user);
             if (!$user->getAccountsCollection()->contains($this)) {
                 $user->getAccountsCollection()->add($this);
@@ -363,5 +364,25 @@ class Account
     public function canShareAccount(User $user): bool
     {
         return $this->isCreator($user);
+    }
+
+    private $lastTransactions;
+
+    /**
+     * @return mixed
+     */
+    public function getLastTransactions()
+    {
+        return $this->lastTransactions;
+    }
+
+    /**
+     * @param mixed $lastTransactions
+     * @return Account
+     */
+    public function setLastTransactions($lastTransactions)
+    {
+        $this->lastTransactions = $lastTransactions;
+        return $this;
     }
 }

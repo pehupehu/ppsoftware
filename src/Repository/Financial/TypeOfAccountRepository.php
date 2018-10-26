@@ -4,6 +4,7 @@ namespace App\Repository\Financial;
 
 use App\Entity\Financial\TypeOfAccount;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 /**
  * Class TypeOfAccountRepository
@@ -11,7 +12,10 @@ use Doctrine\ORM\EntityRepository;
  */
 class TypeOfAccountRepository extends EntityRepository
 {
-    public function loadTypes()
+    /**
+     * @return Query
+     */
+    public function getTypesQuery(): Query
     {
         $query = $this->createQueryBuilder('t');
         return $query->getQuery();

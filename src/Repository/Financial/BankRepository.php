@@ -4,6 +4,7 @@ namespace App\Repository\Financial;
 
 use App\Entity\Financial\Bank;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 /**
  * Class BankRepository
@@ -11,7 +12,10 @@ use Doctrine\ORM\EntityRepository;
  */
 class BankRepository extends EntityRepository
 {
-    public function loadBanks()
+    /**
+     * @return Query
+     */
+    public function getBanksQuery(): Query
     {
         $query = $this->createQueryBuilder('b');
         return $query->getQuery();

@@ -2,6 +2,9 @@ all:
 
   financial:
     children:
+      transaction:
+        route: financial_transaction
+        role: ROLE_USER
       bank:
         route: financial_bank
         icon: oi oi-basket

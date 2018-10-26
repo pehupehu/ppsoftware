@@ -3,6 +3,7 @@
 namespace App\Repository\Financial;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 /**
  * Class CategoryRepository
@@ -10,9 +11,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class CategoryRepository extends EntityRepository
 {
-    public function loadCredit()
+    /**
+     * @return Query
+     */
+    public function getCreditQuery(): Query
     {
         $query = $this->createQueryBuilder('p');
+
+        $query
+            ->addSelect('c');
 
         $query
             ->leftJoin('p.childrens', 'c');
@@ -27,9 +34,15 @@ class CategoryRepository extends EntityRepository
         return $query->getQuery();
     }
 
-    public function loadDebit()
+    /**
+     * @return Query
+     */
+    public function getDebitQuery(): Query
     {
         $query = $this->createQueryBuilder('p');
+
+        $query
+            ->addSelect('c');
 
         $query
             ->leftJoin('p.childrens', 'c');

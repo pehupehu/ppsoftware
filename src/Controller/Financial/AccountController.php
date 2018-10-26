@@ -36,7 +36,7 @@ class AccountController extends AbstractController
     {
         /** @var AccountRepository $accountRepo */
         $accountRepo = $this->getDoctrine()->getRepository(Account::class);
-        $pager = new Pager($accountRepo->loadAccounts($this->getUser()));
+        $pager = new Pager($accountRepo->getAccountsQueryForOneUser($this->getUser()));
         $pager->setPage($request->get('page', 1));
         $pager->setRouteName('financial_account');
 
@@ -58,7 +58,6 @@ class AccountController extends AbstractController
     {
         $account = new Account();
         $account->setId(0);
-        $account->setCreatorId($this->getUser()->getId());
         $account->setCreator($this->getUser());
         $typeOfAccount = new TypeOfAccount();
         $typeOfAccount->setId(0);
@@ -73,16 +72,14 @@ class AccountController extends AbstractController
         $account->setDescription('');
         $account->setInitialBalance(0);
         $account->setCurrentBalance(0);
-        $account->setAmountCurrency(Currency::EUR);
+        $account->setBalanceCurrency(Currency::EUR);
+        $account->setCreator($this->getUser());
 
         $form = $this->createForm(AccountType::class, $account);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Account $account */
             $account = $form->getData();
-
-            $account->setBankId($account->getBank()->getId());
-            $account->setTypeOfAccountId($account->getTypeOfAccount()->getId());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($account);

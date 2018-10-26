@@ -31,8 +31,8 @@ class CategoryController extends AbstractController
     {
         /** @var CategoryRepository $categoryRepo */
         $categoryRepo = $this->getDoctrine()->getRepository(Category::class);
-        $categoriesCredit = $categoryRepo->loadCredit()->execute();
-        $categoriesDebit = $categoryRepo->loadDebit()->execute();
+        $categoriesCredit = $categoryRepo->getCreditQuery()->execute();
+        $categoriesDebit = $categoryRepo->getDebitQuery()->execute();
 
         return $this->render('financial/category/list.html.twig', [
             'categoriesCredit' => $categoriesCredit,

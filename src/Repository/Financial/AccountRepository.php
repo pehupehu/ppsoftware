@@ -4,6 +4,7 @@ namespace App\Repository\Financial;
 
 use App\Entity\Financial\Account;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
@@ -15,23 +16,30 @@ use Doctrine\ORM\Query;
 class AccountRepository extends EntityRepository
 {
     /**
-     * @param User $loggedUser
-     * @return \Doctrine\ORM\Query
+     * @param User $user
+     * @return Query
      */
-    public function loadAccounts(User $loggedUser): Query
+    public function getAccountsQueryForOneUser(User $user): Query
     {
         $query = $this->createQueryBuilder('a');
 
         $query
-            ->leftJoin('a.users', 'u');
+            ->addSelect('a')
+            ->addSelect('u')
+            ->addSelect('t')
+            ->addSelect('b');
 
         $query
-            ->where('a.creator = :creator OR u.id = :user_id');
+            ->innerJoin('a.users', 'u')
+            ->innerJoin('a.typeOfAccount', 't')
+            ->innerJoin('a.bank', 'b');
+
+        $query
+            ->where('u = :user');
 
         $query
             ->setParameters([
-                ':creator' => $loggedUser,
-                ':user_id' => $loggedUser->getId(),
+                ':user' => $user,
             ]);
 
         return $query->getQuery();
@@ -45,18 +53,13 @@ class AccountRepository extends EntityRepository
     {
         $allowedUsers = [];
 
-        // Account's creator
-        if ($with_creator) {
-            $allowedUsers[] = $account->getCreator();
-        }
-
-        // Other users
-        /** @var User $user */
         foreach ($account->getUsers() as $user) {
-            $allowedUsers[] = $user;
+            if ($with_creator) {
+                $allowedUsers[] = $user;
+            } elseif (!$account->isCreator($user)) {
+                $allowedUsers[] = $user;
+            }
         }
-
-        dump($allowedUsers);
 
         return $allowedUsers;
     }
@@ -68,6 +71,7 @@ class AccountRepository extends EntityRepository
     {
         $unallowedUsers = [];
 
+        /** @var UserRepository $userRepo */
         $userRepo = $this->getEntityManager()->getRepository(User::class);
 
         $allowedUsers = $this->getAllowedUsers($account);

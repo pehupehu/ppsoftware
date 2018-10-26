@@ -10,6 +10,7 @@ navbar:
     account: Comptes
     type_transaction: Types d'opérations
     category: Catégories
+    transaction: Opérations
 
 admin:
     title: Administration
