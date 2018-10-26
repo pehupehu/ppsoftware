@@ -13,13 +13,13 @@ use Doctrine\Common\Persistence\ObjectManager;
 class CategoryFixtures extends Fixture
 {
     /**
-     * Ref to the type surnamed CB
+     * Ref to the category surnamed HP
      */
-    const CB_REFERENCE = 'CB';
+    const HP_REFERENCE = 'HP';
     /**
-     * Ref to the type surnamed CHQ
+     * Ref to the category surnamed CHQ
      */
-    const CHQ_REFERENCE = 'CHQ';
+    const DEPOT_CHQ_REFERENCE = 'DEPOT_CHQ';
 
     /**
      * @param ObjectManager $manager
@@ -36,8 +36,11 @@ class CategoryFixtures extends Fixture
 
         $children = new Category();
         $children->setName('Hp');
+        $children->setLogo('hp.jpg');
         $manager->persist($children);
         $parent->addChildren($children);
+
+        $this->addReference(self::HP_REFERENCE, $children);
 
         $children = new Category();
         $children->setName('Karcher');
@@ -46,6 +49,7 @@ class CategoryFixtures extends Fixture
 
         $children = new Category();
         $children->setName('Samsung');
+        $children->setLogo('samsung.png');
         $manager->persist($children);
         $parent->addChildren($children);
 
@@ -77,11 +81,15 @@ class CategoryFixtures extends Fixture
 
         $children = new Category();
         $children->setName('Chèque');
+        $children->setLogo('cheque.png');
         $manager->persist($children);
         $parent->addChildren($children);
 
+        $this->addReference(self::DEPOT_CHQ_REFERENCE, $children);
+
         $children = new Category();
         $children->setName('Espèce');
+        $children->setLogo('espece.jpg');
         $manager->persist($children);
         $parent->addChildren($children);
 
@@ -97,16 +105,19 @@ class CategoryFixtures extends Fixture
 
         $children = new Category();
         $children->setName('Leclerc');
+        $children->setLogo('leclerc.jpeg');
         $manager->persist($children);
         $parent->addChildren($children);
 
         $children = new Category();
         $children->setName('Auchan');
+        $children->setLogo('auchan.jpg');
         $manager->persist($children);
         $parent->addChildren($children);
 
         $children = new Category();
         $children->setName('Carrefour');
+        $children->setLogo('carrefour.png');
         $manager->persist($children);
         $parent->addChildren($children);
 

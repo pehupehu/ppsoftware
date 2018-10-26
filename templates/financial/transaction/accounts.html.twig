@@ -11,10 +11,12 @@
             <div class="col-4">
                 <div class="card">
                     <div class="card-header">
-                        {% if account.bank.logo %}
-                            <img class="img-thumbnail" height="50px" width="50px" src="{{ asset(app_bank_logo_dir ~ '/' ~ account.bank.logo) }}">
-                        {% endif %}
-                        {{ account.typeOfAccount.name }}
+                        <a href="{{ path('financial_transaction_account', {'account_id': account.id}) }}" class="text-dark">
+                            {% if account.bank.logo %}
+                                <img class="img-thumbnail" height="50px" width="50px" src="{{ asset(app_bank_logo_dir ~ '/' ~ account.bank.logo) }}">
+                            {% endif %}
+                            {{ account.typeOfAccount.name }}
+                        </a>
                     </div>
                     {% if account.getLastTransactions()|length %}
                     <div class="card-body">

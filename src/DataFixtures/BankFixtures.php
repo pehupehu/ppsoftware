@@ -33,6 +33,7 @@ class BankFixtures extends Fixture
         $bank = new Bank();
         $bank->setName('Crédit Agricole');
         $bank->setSurname('CA');
+        $bank->setLogo('ca.png');
         $manager->persist($bank);
 
         $this->addReference(self::CA_REFERENCE, $bank);
@@ -40,6 +41,7 @@ class BankFixtures extends Fixture
         $bank = new Bank();
         $bank->setName("Caisse d'épargne");
         $bank->setSurname('CE');
+        $bank->setLogo('ce.png');
         $manager->persist($bank);
 
         $this->addReference(self::CE_REFERENCE, $bank);
@@ -47,6 +49,7 @@ class BankFixtures extends Fixture
         $bank = new Bank();
         $bank->setName('Société générale');
         $bank->setSurname('SG');
+        $bank->setLogo('sg.jpg');
         $manager->persist($bank);
 
         $this->addReference(self::SG_REFERENCE, $bank);

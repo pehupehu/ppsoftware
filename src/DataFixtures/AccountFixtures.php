@@ -18,6 +18,15 @@ use Doctrine\Common\Persistence\ObjectManager;
 class AccountFixtures extends Fixture implements DependentFixtureInterface
 {
     /**
+     * Ref to the account surnamed CCCA
+     */
+    const CCCA_REFERENCE = 'CCCA';
+    /**
+     * Ref to the account surnamed LAC
+     */
+    const LAC_REFERENCE = 'LAC';
+
+    /**
      * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager)
@@ -50,6 +59,8 @@ class AccountFixtures extends Fixture implements DependentFixtureInterface
         $account->addUser($user);
         $manager->persist($account);
 
+        $this->addReference(self::CCCA_REFERENCE, $account);
+
         $account = new Account();
         $account->setName("Compte Courant Caisse d'épargne");
         $account->setSurname('CCCE');
@@ -75,6 +86,8 @@ class AccountFixtures extends Fixture implements DependentFixtureInterface
         $account->setCreator($admin);
         $manager->persist($account);
 
+        $this->addReference(self::LAC_REFERENCE, $account);
+
         $account = new Account();
         $account->setName("Livret A Julie");
         $account->setSurname('LAJ');
@@ -96,9 +109,9 @@ class AccountFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return [
+            TypeOfAccountFixtures::class,
             UserFixtures::class,
             BankFixtures::class,
-            TypeOfAccountFixtures::class,
         ];
     }
 }

@@ -4,14 +4,14 @@ namespace App\EventListener\Entity;
 
 use App\Entity\User;
 use App\Entity\UserActivity;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\ORM\Mapping\PostUpdate;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
+/**
+ * Class UserListener
+ * @package App\EventListener\Entity
+ */
 class UserListener
 {
     /** @var array */
@@ -33,6 +33,9 @@ class UserListener
         $this->session = $session;
     }
 
+    /**
+     * @param LifecycleEventArgs $args
+     */
     public function preUpdate(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
@@ -76,6 +79,9 @@ class UserListener
         }
     }
 
+    /**
+     * @param LifecycleEventArgs $args
+     */
     public function postUpdate(LifecycleEventArgs $args)
     {
         if (!empty($this->logs)) {
@@ -91,6 +97,9 @@ class UserListener
         }
     }
 
+    /**
+     * @return array
+     */
     private function getMonitored()
     {
         return [

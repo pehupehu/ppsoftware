@@ -34,7 +34,7 @@ class Transaction
     private $account;
 
     /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     * @ORM\Column(type="date")
      * @var \DateTime
      */
     private $date;
@@ -44,33 +44,6 @@ class Transaction
      * @var \DateTime
      */
     private $createdAt;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="TypeOfTransaction")
-     * @ORM\JoinColumn(name="type_of_transaction_id", referencedColumnName="id")
-     * @var TypeOfTransaction
-     */
-    private $typeOfTransaction;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(name="tick_user_id", referencedColumnName="id")
-     * @var User
-     */
-    private $tickUser;
-
-    /**
-     * @ORM\Column(name="tick_date", type="datetime")
-     * @var \DateTime
-     */
-    private $tickDate;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Category")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     * @var Category
-     */
-    private $category;
 
     /**
      * @ORM\Column(type="string")
@@ -97,10 +70,37 @@ class Transaction
     private $amount;
 
     /**
-     * @ORM\Column(type="integer", options={"unsigned": true})
+     * @ORM\Column(type="integer", nullable=true, options={"unsigned": true})
      * @var integer
      */
     private $cheque_number;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TypeOfTransaction")
+     * @ORM\JoinColumn(name="type_of_transaction_id", referencedColumnName="id")
+     * @var TypeOfTransaction
+     */
+    private $typeOfTransaction;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @var Category
+     */
+    private $category;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(name="tick_user_id", referencedColumnName="id")
+     * @var User
+     */
+    private $tickUser;
+
+    /**
+     * @ORM\Column(name="tick_date", type="datetime", nullable=true)
+     * @var \DateTime
+     */
+    private $tickDate;
 
     /**
      * @return int
@@ -193,78 +193,6 @@ class Transaction
     }
 
     /**
-     * @return TypeOfTransaction
-     */
-    public function getTypeOfTransaction(): TypeOfTransaction
-    {
-        return $this->typeOfTransaction;
-    }
-
-    /**
-     * @param TypeOfTransaction $typeOfTransaction
-     * @return Transaction
-     */
-    public function setTypeOfTransaction(TypeOfTransaction $typeOfTransaction): Transaction
-    {
-        $this->typeOfTransaction = $typeOfTransaction;
-        return $this;
-    }
-
-    /**
-     * @return User
-     */
-    public function getTickUser(): User
-    {
-        return $this->tickUser;
-    }
-
-    /**
-     * @param User $tickUser
-     * @return Transaction
-     */
-    public function setTickUser(User $tickUser): Transaction
-    {
-        $this->tickUser = $tickUser;
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getTickDate(): \DateTime
-    {
-        return $this->tickDate;
-    }
-
-    /**
-     * @param \DateTime $tickDate
-     * @return Transaction
-     */
-    public function setTickDate(\DateTime $tickDate): Transaction
-    {
-        $this->tickDate = $tickDate;
-        return $this;
-    }
-
-    /**
-     * @return Category
-     */
-    public function getCategory(): Category
-    {
-        return $this->category;
-    }
-
-    /**
-     * @param Category $category
-     * @return Transaction
-     */
-    public function setCategory(Category $category): Transaction
-    {
-        $this->category = $category;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getName(): string
@@ -297,6 +225,7 @@ class Transaction
     public function setDebit(bool $debit): Transaction
     {
         $this->debit = $debit;
+        $this->credit = !$debit;
         return $this;
     }
 
@@ -315,6 +244,7 @@ class Transaction
     public function setCredit(bool $credit): Transaction
     {
         $this->credit = $credit;
+        $this->debit = !$credit;
         return $this;
     }
 
@@ -351,6 +281,78 @@ class Transaction
     public function setChequeNumber(int $cheque_number): Transaction
     {
         $this->cheque_number = $cheque_number;
+        return $this;
+    }
+
+    /**
+     * @return TypeOfTransaction
+     */
+    public function getTypeOfTransaction(): TypeOfTransaction
+    {
+        return $this->typeOfTransaction;
+    }
+
+    /**
+     * @param TypeOfTransaction $typeOfTransaction
+     * @return Transaction
+     */
+    public function setTypeOfTransaction(TypeOfTransaction $typeOfTransaction): Transaction
+    {
+        $this->typeOfTransaction = $typeOfTransaction;
+        return $this;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getCategory(): Category
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param Category $category
+     * @return Transaction
+     */
+    public function setCategory(Category $category): Transaction
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getTickUser(): User
+    {
+        return $this->tickUser;
+    }
+
+    /**
+     * @param User $tickUser
+     * @return Transaction
+     */
+    public function setTickUser(User $tickUser): Transaction
+    {
+        $this->tickUser = $tickUser;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getTickDate(): \DateTime
+    {
+        return $this->tickDate;
+    }
+
+    /**
+     * @param \DateTime $tickDate
+     * @return Transaction
+     */
+    public function setTickDate(\DateTime $tickDate): Transaction
+    {
+        $this->tickDate = $tickDate;
         return $this;
     }
 }
