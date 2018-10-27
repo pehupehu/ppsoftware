@@ -3,12 +3,16 @@
 namespace App\Controller\Financial;
 
 use App\Entity\Financial\Account;
+use App\Entity\Financial\Bank;
 use App\Entity\Financial\Transaction;
 use App\Entity\User;
+use App\Repository\Financial\BankRepository;
 use App\Repository\Financial\TransactionRepository;
 use App\Repository\Financial\AccountRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -19,7 +23,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
  */
 class TransactionController extends AbstractController
 {
-
     /**
      * @Route("/financial/transaction", name="financial_transaction")
      *
@@ -49,7 +52,7 @@ class TransactionController extends AbstractController
 
         /** @var AccountRepository $accountRepo */
         $accountRepo = $this->getDoctrine()->getRepository(Account::class);
-        $accounts = $accountRepo->getAccountsQueryForOneUser($loggedUser)->execute([], Query::HYDRATE_OBJECT);
+        $accounts = $accountRepo->getAccountsQueryForOneUser($loggedUser)->execute();
 
         /** @var TransactionRepository $transactionRepo */
         $transactionRepo = $this->getDoctrine()->getRepository(Transaction::class);
@@ -57,6 +60,37 @@ class TransactionController extends AbstractController
 
         return $this->render('financial/transaction/accounts.html.twig', [
             'accounts' => $accounts,
+        ]);
+    }
+
+    /**
+     * @Route("/financial/transaction/accounts/{bank_id}", name="financial_transaction_accounts_bank", requirements={"bank_id":"\d+"})
+     *
+     * @ParamConverter("bank", options={"id" = "bank_id"})
+     * 
+     * @return Response
+     */
+    public function bankAccounts(Bank $bank)
+    {
+        /** @var User $loggedUser */
+        $loggedUser = $this->getUser();
+
+        /** @var AccountRepository $accountRepo */
+        $accountRepo = $this->getDoctrine()->getRepository(Account::class);
+        $accounts = $accountRepo->getAccountsQueryForOneUserAndOneBank($loggedUser, $bank)->execute();
+
+        /** @var BankRepository $bankRepo */
+        $bankRepo = $this->getDoctrine()->getRepository(Bank::class);
+        $banks = $bankRepo->getBanksQueryForOneUser($loggedUser)->execute();
+
+        /** @var TransactionRepository $transactionRepo */
+        $transactionRepo = $this->getDoctrine()->getRepository(Transaction::class);
+        $transactionRepo->addLastTransactionsToManyAccounts($accounts);
+
+        return $this->render('financial/transaction/accounts.html.twig', [
+            'accounts' => $accounts,
+            'banks' => $banks,
+            'bank' => $bank,
         ]);
     }
 
@@ -69,8 +103,36 @@ class TransactionController extends AbstractController
      */
     public function account(Account $account): Response
     {
-        return $this->render('financial/transaction/account.html.twig', [
+        /** @var TransactionRepository $transactionRepo */
+        $transactionRepo = $this->getDoctrine()->getRepository(Transaction::class);
+        $years = $transactionRepo->getTransactionsYearForOneAccount($account);
 
+        return $this->render('financial/transaction/account.html.twig', [
+            'account' => $account,
+            'years' => $years,
         ]);
     }
+
+    /**
+     * @Route("/financial/transaction/{account_id}/{year}", name="financial_transaction_account_year", requirements={"year":"[0-9]{4}"})
+     *
+     * @ParamConverter("account", options={"id" = "account_id"})
+     *
+     * @return Response
+     */
+    public function transactions(Account $account, int $year, Request $request): Response
+    {
+        $isXmlHttpRequest = $request->isXmlHttpRequest();
+
+        /** @var TransactionRepository $transactionRepo */
+        $transactionRepo = $this->getDoctrine()->getRepository(Transaction::class);
+        $transactions = $transactionRepo->getTransactionsForOneAccount($account, $year);
+
+        return $this->render('financial/transaction/transactions.html.twig', [
+            'isXmlHttpRequest' => $isXmlHttpRequest,
+            'transactions' => $transactions,
+        ]);
+    }
+
+    
 }

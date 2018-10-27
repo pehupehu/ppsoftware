@@ -145,6 +145,10 @@ financial:
                 move: La catégorie a été déplacée avec succès
             warning:
                 move: La catégorie n'a pas pu être déplacée
+    transaction:
+        title:
+            accounts: Mes comptes
+            account: Mon compte
 
 generic:
     field:

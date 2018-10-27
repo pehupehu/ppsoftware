@@ -6,26 +6,77 @@
 
 {% block container %}
 
+    {% if banks is defined and banks|length %}
+        <div class="row pb-2">
+            <div class="col-12 text-center">
+                {% for tmp_bank in banks %}
+                    <a href="{{ path('financial_transaction_accounts_bank', {'bank_id': tmp_bank.id}) }}" class="text-dark">
+                        {% if tmp_bank.logo %}
+                            {% if tmp_bank == bank %}
+                                <img class="img-thumbnail" height="75px" width="75px" src="{{ asset(app_bank_logo_dir ~ '/' ~ tmp_bank.logo) }}">
+                            {% else %}
+                                <img class="img-thumbnail" height="50px" width="50px" src="{{ asset(app_bank_logo_dir ~ '/' ~ tmp_bank.logo) }}">
+                            {% endif %}
+                        {% else %}
+                            {{ tmp_bank.surname }}
+                        {% endif %}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
     <div class="row">
         {% for account in accounts %}
-            <div class="col-4">
-                <div class="card">
-                    <div class="card-header">
-                        <a href="{{ path('financial_transaction_account', {'account_id': account.id}) }}" class="text-dark">
+            <div class="mb-3 col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                <div class="card small">
+                    <div class="card-header p-2">
+                        <a href="{{ path('financial_transaction_accounts_bank', {'bank_id': account.bank.id}) }}" class="text-dark">
                             {% if account.bank.logo %}
                                 <img class="img-thumbnail" height="50px" width="50px" src="{{ asset(app_bank_logo_dir ~ '/' ~ account.bank.logo) }}">
+                            {% else %}
+                                {{ account.bank.surname }}
                             {% endif %}
+                        </a>    
+                        <a href="{{ path('financial_transaction_account', {'account_id': account.id}) }}" class="text-dark">
                             {{ account.typeOfAccount.name }}
                         </a>
                     </div>
                     {% if account.getLastTransactions()|length %}
-                    <div class="card-body">
+                    <div class="card-body py-1">
                         {% for transaction in account.getLastTransactions() %}
+                            <div class="row">
+                                <div class="p-0 col-7 col-sm-8 col-md-8 col-lg-6 col-xl-9">
+                                    <label class="alert p-1 m-1">{{ transaction.name }}</label>
+                                </div>
+                                <div class="p-0 text-right col-5 col-sm-4 col-md-4 col-lg-6 col-xl-3">
+                                    {% if (transaction.isCredit) %}
+                                        <label class="alert alert-link alert-info p-1 w-100 m-1">
+                                            + {{ transaction.amount|localizedcurrency(account.balanceCurrency) }}
+                                        </label>
+                                    {% else %}
+                                        <label class="alert alert-link alert-danger p-1 w-100 m-1">
+                                            - {{ transaction.amount|localizedcurrency(account.balanceCurrency) }}
+                                        </label>
+                                    {% endif %}
+                                </div>
+                            </div>
                         {% endfor %}
                     </div>
                     {% endif %}
-                    <div class="card-footer text-right">
-                        {{ account.currentBalance|localizedcurrency(account.balanceCurrency) }}
+                    <div class="card-footer py-1">
+                        <div class="row">
+                            <div class="offset-6 col-6 p-0 text-right">
+                                {% if (account.currentBalance >= 0) %}
+                                    <span class="font-weight-bold text-success p-1 w-50 m-1">
+                                        + {{ account.currentBalance|localizedcurrency(account.balanceCurrency) }}
+                                    </span>
+                                {% else %}
+                                    <span class="font-weight-bold text-danger p-1 w-50 m-1">
+                                        - {{ account.currentBalance|localizedcurrency(account.balanceCurrency) }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

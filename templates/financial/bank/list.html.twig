@@ -32,8 +32,8 @@
                             </div>
                         </th>
                         <th></th>
-                        <th class="text-center d-none d-sm-none d-md-table-cell" scope="col">{{ 'financial.bank.field.name'|trans }}</th>
-                        <th class="text-center d-none d-sm-none d-md-table-cell" scope="col">{{ 'financial.bank.field.surname'|trans }}</th>
+                        <th class="text-center d-md-table-cell" scope="col">{{ 'financial.bank.field.name'|trans }}</th>
+                        <th class="text-center d-none d-md-table-cell" scope="col">{{ 'financial.bank.field.surname'|trans }}</th>
                         <th class="text-center" scope="col">{{ 'generic.field.actions'|trans }}</th>
                     </tr>
                     </thead>
@@ -45,15 +45,15 @@
                                 <input type="checkbox" class="form-check-input pp-check-uncheck-id" data-id="{{ bank.id }}" title="">
                             </div>
                         </td>
-                        <td class="text-center d-none d-sm-none d-md-table-cell">
+                        <td class="text-center d-md-table-cell">
                             {% if bank.logo %}
                                 <img class="img-thumbnail" height="25px" width="25px" src="{{ asset(app_bank_logo_dir ~ '/' ~ bank.logo) }}">
                             {% endif %}
                         </td>
-                        <td class="text-center d-none d-sm-none d-md-table-cell">
+                        <td class="text-center d-md-table-cell">
                             {{ bank.name }}
                         </td>
-                        <td class="text-center d-none d-sm-none d-md-table-cell">
+                        <td class="text-center d-none d-md-table-cell">
                             {{ bank.surname }}
                         </td>
                         <td class="text-center d-none d-sm-none d-md-none d-lg-none d-xl-table-cell">

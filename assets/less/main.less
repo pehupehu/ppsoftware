@@ -158,3 +158,21 @@
   opacity: 0.3;
   cursor: pointer;
 }
+
+.dark {
+  background-color: #f8f9fa;
+}
+
+.transaction-row {
+  opacity: 0.7;
+
+  &:hover{
+    &:extend(.dark);
+    opacity: 1;
+    cursor: pointer;
+  }
+  
+  &:nth-child(odd) {
+    &:extend(.dark);
+  }
+}

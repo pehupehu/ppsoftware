@@ -3,11 +3,13 @@
 namespace App\Repository\Financial;
 
 use App\Entity\Financial\Account;
+use App\Entity\Financial\Bank;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class AccountRepository
@@ -16,10 +18,9 @@ use Doctrine\ORM\Query;
 class AccountRepository extends EntityRepository
 {
     /**
-     * @param User $user
-     * @return Query
+     * @return QueryBuilder
      */
-    public function getAccountsQueryForOneUser(User $user): Query
+    private function getAccountsQueryBuilder(): QueryBuilder
     {
         $query = $this->createQueryBuilder('a');
 
@@ -34,12 +35,45 @@ class AccountRepository extends EntityRepository
             ->innerJoin('a.typeOfAccount', 't')
             ->innerJoin('a.bank', 'b');
 
+        return $query;
+    }
+
+    /**
+     * @param User $user
+     * @return Query
+     */
+    public function getAccountsQueryForOneUser(User $user): Query
+    {
+        $query = $this->getAccountsQueryBuilder();
+
         $query
             ->where('u = :user');
 
         $query
             ->setParameters([
                 ':user' => $user,
+            ]);
+
+        return $query->getQuery();
+    }
+
+    /**
+     * @param User $user
+     * @param Bank $bank
+     * @return Query
+     */
+    public function getAccountsQueryForOneUserAndOneBank(User $user, Bank $bank): Query
+    {
+        $query = $this->getAccountsQueryBuilder();
+
+        $query
+            ->where('u = :user')
+            ->andWhere('b = :bank');
+
+        $query
+            ->setParameters([
+                ':user' => $user,
+                ':bank' => $bank,
             ]);
 
         return $query->getQuery();

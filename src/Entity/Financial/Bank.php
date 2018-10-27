@@ -2,6 +2,7 @@
 
 namespace App\Entity\Financial;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -37,6 +38,20 @@ class Bank
      * @var string
      */
     private $logo;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Account", mappedBy="bank")
+     * @var ArrayCollection
+     */
+    private $accounts;
+
+    /**
+     * Bank constructor.
+     */
+    public function __construct()
+    {
+        $this->accounts = new ArrayCollection();
+    }
 
     /**
      * @return int

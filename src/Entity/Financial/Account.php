@@ -36,7 +36,7 @@ class Account
     private $typeOfAccount;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Bank")
+     * @ORM\ManyToOne(targetEntity="Bank", inversedBy="accounts")
      * @ORM\JoinColumn(name="bank_id", referencedColumnName="id")
      * @var Bank
      */

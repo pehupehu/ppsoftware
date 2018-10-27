@@ -341,7 +341,7 @@ class Transaction
     /**
      * @return \DateTime
      */
-    public function getTickDate(): \DateTime
+    public function getTickDate()
     {
         return $this->tickDate;
     }

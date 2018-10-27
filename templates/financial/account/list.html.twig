@@ -31,9 +31,9 @@
                                 <input type="checkbox" class="form-check-input pp-check-uncheck-all" data-check="{{ 'generic.checkboxes.check_all'|trans }}" data-uncheck="{{ 'generic.checkboxes.uncheck_all'|trans }}" title="">
                             </div>
                         </th>
-                        <th class="text-center d-none d-sm-none d-md-table-cell" scope="col">{{ 'financial.account.field.bank'|trans }}</th>
-                        <th class="text-center d-none d-sm-none d-md-table-cell" scope="col">{{ 'financial.account.field.name'|trans }}</th>
-                        <th class="text-center d-none d-sm-none d-md-table-cell" scope="col">{{ 'financial.account.field.surname'|trans }}</th>
+                        <th class="text-center d-md-table-cell" scope="col">{{ 'financial.account.field.bank'|trans }}</th>
+                        <th class="text-center d-md-table-cell" scope="col">{{ 'financial.account.field.name'|trans }}</th>
+                        <th class="text-center d-none d-md-table-cell" scope="col">{{ 'financial.account.field.surname'|trans }}</th>
                         <th class="text-center" scope="col">{{ 'generic.field.actions'|trans }}</th>
                     </tr>
                     </thead>
@@ -45,17 +45,17 @@
                                 <input type="checkbox" class="form-check-input pp-check-uncheck-id" data-id="{{ account.id }}" title="">
                             </div>
                         </td>
-                        <td class="text-center d-none d-sm-none d-md-table-cell">
+                        <td class="text-center d-md-table-cell">
                             {% if account.bank.logo %}
                                 <img class="img-thumbnail" height="25px" width="25px" src="{{ asset(app_bank_logo_dir ~ '/' ~ account.bank.logo) }}">
                             {% else %}
                                 {{ account.bank.name }}
                             {% endif %}
                         </td>
-                        <td class="text-center d-none d-sm-none d-md-table-cell">
+                        <td class="text-center d-md-table-cell">
                             {{ account.name }}
                         </td>
-                        <td class="text-center d-none d-sm-none d-md-table-cell">
+                        <td class="text-center d-none d-md-table-cell">
                             {{ account.surname }}
                         </td>
                         <td class="text-center d-none d-sm-none d-md-none d-lg-none d-xl-table-cell">
