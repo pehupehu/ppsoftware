@@ -6,145 +6,235 @@ class PPbox {
         window.location.href = url;
     }
 
-    static confirm(id, title, body, theme, width, button1, button2, button3) {
+    static close(id) {
+        this._closeDialog(id);
+    }
+
+    static dialog(type, id, title, content, options) {
         if (this.dialogs === undefined) {
             this.dialogs = {};
         }
+        
+        if (title === undefined) {
+            if (type === 'confirm') {
+                title = Translator.trans('generic.diag_confirm.title');
+            } else if (type === 'alert') {
+                title = Translator.trans('generic.diag_alert.title');
+            }
+        }
+
+        if (content === undefined) {
+            content = Translator.trans('generic.loading.message');
+        }
 
         if (this.dialogs[id] === undefined) {
-            this._createDialog(id, title, body, theme, width, button1, button2, button3);
+            this._createDialog(type, id, title, content, options);
         } else {
-            this._openDialog(id, title, body, theme, width, button1, button2, button3);
+            this._openDialog(type, id, title, content, options);
         }
     }
 
-    static alert(id, title, body, theme, width, button1, button2, button3) {
-        if (this.dialogs === undefined) {
-            this.dialogs = {};
-        }
+    static form(id, title, url, params, options) {
+        PPbox.dialog('form', id, title);
+        $.get(url, params).done(function (content) {
+            for (let i in options.buttons) {
+                if (!options.buttons.hasOwnProperty(i)) {
+                    continue;
+                }
+                if (options.buttons[i].success === undefined) {
+                    continue;
+                }
 
-        if (this.dialogs[id] === undefined) {
-            this._createDialog(id, title, body, theme, width, button1, button2, button3);
-        } else {
-            this._openDialog(id, title, body, theme, width, button1, button2, button3);
-        }
+                let callback_submit = options.buttons[i].callback_submit;
+
+                options.buttons[i].click = function () {
+                    let form = $('form'),
+                        form_serialize = form.serializeArray(),
+                        form_name = form.attr('name'),
+                        regex = /([_A-Za-z]+)(\[)([_A-Za-z]+)(\])/i,
+                        field_name, correspondance, form_data = {};
+
+                    form_data[form_name] = {};
+                    for (let i in form_serialize) {
+                        if (!form_serialize.hasOwnProperty(i)) {
+                            continue;
+                        }
+                        correspondance = regex.exec(form_serialize[i]['name']);
+                        if (correspondance) {
+                            field_name = correspondance[3];
+                            form_data[form_name][field_name] = form_serialize[i]['value'];
+                        }
+                    }
+
+                    $.post(url, form_data).done(function (data) {
+                        if (data.success) {
+                            callback_submit(data);
+                            return;
+                        } else {
+                            PPbox.refreshContent(id, data);
+                        }
+                    });
+                };
+
+                delete options.buttons[i].callback;
+                delete options.buttons[i].callback_submit;
+            }
+
+            PPbox.dialog('form', id, title, content, options);
+            bindJsDatePicker();
+        });
     }
 
-    static _openDialog(id, title, body, theme, width, button1, button2, button3) {
-        let d = $('#' + id);
+    static refreshContent(id, content) {
+        $('#ppbox' + id).html(content);
+    }
+
+    static confirm(id, title, content, options) {
+        this.dialog('confirm', id, title, content, options);
+    }
+
+    static alert(id, title, content, options) {
+        this.dialog('alert', id, title, content, options);
+    }
+
+    static _openDialog(type, id, title, content, options) {
+        let d = $('#ppbox' + id);
         d.data('title', title);
-        d.html(body);
-        d.dialog(this._buildOptions(id, theme, width, button1, button2, button3));
-        d.dialog('open');
+        d.html(content);
+        options = this._parseOptions(type, id, options);
+        d.dialog(options);
     }
 
     static _closeDialog(id) {
-        $('#' + id).dialog('close');
+        $('#ppbox' + id).dialog('close');
     }
 
-    static _createDialog(id, title, body, theme, width, button1, button2, button3) {
+    static _createDialog(type, id, title, content, options) {
         if (this.dialogs === undefined) {
-            this.dialogs = 0;
+            this.dialogs = {};
         }
         this.dialogs[id] = true;
 
-        $(document.body).append('<div id="' + id + '" title="' + title + '">' + body + '</div>');
-        $('#' + id).dialog(this._buildOptions(id, theme, width, button1, button2, button3));
+        options = this._parseOptions(type, id, options);
+
+        $(document.body).append('<div id="ppbox' + id + '" title="' + title + '">' + content + '</div>');
+        $('#ppbox' + id).dialog(options);
     }
 
-    static _buildOptions(id, theme, width, button1, button2, button3) {
-        let options = {
-            classes: {
-                "ui-dialog": ("ui-corner-all ui-dialog-" + theme + " ui-dialog-" + width),
-                "ui-dialog-titlebar": ("ui-corner-all ui-dialog-titlebar-" + theme + " ui-dialog-titlebar-" + width),
-            },
-            buttons: {}
-        };
-
-        options.buttons = this._buildButtons(id, button1, button2, button3);
+    static _parseOptions(type, id, options) {
+        if (options === undefined) {
+            options = {};
+        }
+        if (options.closeOnEscape === undefined) {
+            options.closeOnEscape = true;
+        }
+        if (options.buttons === undefined) {
+            options.buttons = {};
+        }
+        if (options.classes === undefined) {
+            options.classes = {};
+        }
+        options.buttons = this._parseOptionsButtons(type, id, options.buttons);
+        options.classes = this._parseOptionsClasses(type, options.classes, options.theme, options.size);
 
         return options;
     }
 
-    static _buildButton(id, button, params) {
-        if (button.route !== undefined) {
-            if (button.route_params === undefined) {
-                button.route_params = {};
+    static _parseOptionsClasses(type, classes, theme, size) {
+        if (theme === undefined) {
+            if (type === 'confirm') {
+                theme = 'danger';
+            } else if (type === 'alert') {
+                theme = 'warning';
+            } else {
+                theme = 'default';
+            }
+        }
+
+        if (size === undefined) {
+            size = 'sm';
+        }
+
+        classes = {
+            "ui-dialog": ("ui-corner-all ui-dialog-" + theme + " ui-dialog-" + size),
+            "ui-dialog-titlebar": ("ui-corner-all ui-dialog-titlebar-" + theme + " ui-dialog-titlebar-" + size),
+        };
+
+        return classes;
+    }
+
+    static _parseOptionsButtons(type, id, buttons) {
+        for (let i in buttons) {
+            if (!buttons.hasOwnProperty(i)) {
+                continue;
             }
 
-            if (params !== undefined) {
-                for (var key in params) {
-                    button.route_params[key] = params[key];
+            if (buttons[i].route !== undefined) {
+                if (buttons[i].route_params === undefined) {
+                    buttons[i].route_params = {};
+                }
+                let url = Routing.generate(buttons[i].route, buttons[i].route_params);
+
+                buttons[i].click = function () {
+                    PPbox.redirect(url);
+                };
+            } else if (buttons[i].url !== undefined) {
+                buttons[i].click = function () {
+                    PPbox.redirect(buttons[i].url);
+                };
+            } else if (buttons[i].callback !== undefined) {
+            } else if (buttons[i].success !== undefined) {
+            } else {
+                buttons[i].click = function () {
+                    PPbox._closeDialog(id);
                 }
             }
 
-            button.click = function () {
-                let url = Routing.generate(button.route, button.route_params);
-                PPbox.redirect(url);
-            };
-        } else if (button.redirect !== undefined) {
-            button.click = function () {
-                PPbox.redirect(button.redirect);
-            };
-        } else if (button.callback !== undefined) {
-        } else {
-            button.click = function () {
-                PPbox._closeDialog(id);
+            if (buttons[i].class === undefined) {
+                if (parseInt(i) === 0) {
+                    buttons[i].class = 'btn btn-dark';
+                } else {
+                    buttons[i].class = 'btn btn-outline-dark';
+                }
             }
-        }
-
-        if (button.class === undefined) {
-            button.class = 'btn btn-sm btn-dark';
-        }
-
-        return button;
-    }
-
-    static _buildButtons(id, button1, button2, button3) {
-        let nb_buttons = 0,
-            buttons = {};
-
-        if (button1 !== undefined) {
-            buttons[nb_buttons] = this._buildButton(id, button1);
-            nb_buttons = nb_buttons+1;
-        }
-        if (button2 !== undefined) {
-            buttons[nb_buttons] = this._buildButton(id, button2);
-            nb_buttons = nb_buttons+1;
-        }
-        if (button3 !== undefined) {
-            buttons[nb_buttons] = this._buildButton(id, button3);
         }
 
         return buttons;
     }
 
-    static dialog(type, config, params) {
+    static processInline(type, config, params) {
         let id = config.data('ppbox-id'),
             title = config.data('ppbox-title'),
-            body = config.data('ppbox-body'),
-            theme = config.data('ppbox-theme'),
-            width = config.data('ppbox-width'),
-            button1 = config.data('ppbox-button1'),
-            button2 = config.data('ppbox-button2'),
-            button3 = config.data('ppbox-button3');
+            content = config.data('ppbox-content'),
+            options = {};
+
+        options.theme = config.data('ppbox-theme');
+        options.size = config.data('ppbox-size');
+        options.buttons = config.data('ppbox-buttons');
 
         if (params !== undefined) {
-            if (button1 !== undefined) {
-                button1 = PPbox._buildButton(id, button1, params);
-            }
-            if (button2 !== undefined) {
-                button2 = PPbox._buildButton(id, button2, params);
-            }
-            if (button3 !== undefined) {
-                button3 = PPbox._buildButton(id, button3, params);
+            for (let i in options.buttons) {
+                if (!options.buttons.hasOwnProperty(i)) {
+                    continue;
+                }
+                if (options.buttons[i].route === undefined) {
+                    continue;
+                }
+
+                for (let key in params) {
+                    if (!params.hasOwnProperty(key)) {
+                        continue;
+                    }
+
+                    options.buttons[i].route_params[key] = params[key];
+                }
             }
         }
 
         if (type === 'confirm') {
-            this.confirm(id, title, body, theme, width, button1, button2, button3);
+            this.confirm(id, title, content, options);
         } else if (type === 'alert') {
-            this.alert(id, title, body, theme, width, button1, button2, button3);
+            this.alert(id, title, content, options);
         }
     }
 
@@ -153,11 +243,11 @@ class PPbox {
             ppboxalert = $('.ppboxalert');
 
         ppboxconfirm.on('click', function () {
-            PPbox.dialog('confirm', $(this));
+            PPbox.processInline('confirm', $(this));
         });
 
         ppboxalert.on('click', function () {
-            PPbox.dialog('alert', $(this));
+            PPbox.processInline('alert', $(this));
         });
     }
 

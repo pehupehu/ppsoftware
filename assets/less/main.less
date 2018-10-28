@@ -55,6 +55,14 @@
   background-color: #dc3545!important;
   color: white;
 }
+.ui-dialog-titlebar-primary {
+  background-color: #007bff!important;
+  color: white;
+}
+.ui-dialog-titlebar-dark {
+  background-color: #343a40!important;
+  color: white;
+}
 
 .ui-dialog-buttonset>.btn {
   padding: 2px;
@@ -159,20 +167,24 @@
   cursor: pointer;
 }
 
-.dark {
+.light {
   background-color: #f8f9fa;
 }
 
 .transaction-row {
-  opacity: 0.7;
+  opacity: 0.8;
 
   &:hover{
-    &:extend(.dark);
+    &:extend(.light);
     opacity: 1;
     cursor: pointer;
   }
   
   &:nth-child(odd) {
-    &:extend(.dark);
+    &:extend(.light);
   }
+}
+
+.transaction-edit {
+  opacity: 1;
 }

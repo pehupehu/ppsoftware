@@ -6,12 +6,14 @@ use App\Entity\Financial\Account;
 use App\Entity\Financial\Bank;
 use App\Entity\Financial\Transaction;
 use App\Entity\User;
+use App\Form\Financial\TransactionType;
 use App\Repository\Financial\BankRepository;
 use App\Repository\Financial\TransactionRepository;
 use App\Repository\Financial\AccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -134,5 +136,61 @@ class TransactionController extends AbstractController
         ]);
     }
 
-    
+    /**
+     * @Route("/financial/transaction/new", name="financial_transaction_new")
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function new(Request $request): Response
+    {
+    }
+
+    /**
+     * @Route("/financial/transaction/{id}/edit", name="financial_transaction_edit")
+     *
+     * @param Request $request
+     * @param Transaction $transaction
+     *
+     * @return Response
+     */
+    public function edit(Request $request, Transaction $transaction): Response
+    {
+        $isXmlHttpRequest = $request->isXmlHttpRequest();
+
+        $options = [];
+        if ($isXmlHttpRequest) {
+            $options = ['hide_back_button' => true, 'hide_save_button' => true];
+        }
+        
+        $form = $this->createForm(TransactionType::class, $transaction, $options);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Transaction $transaction */
+            $transaction = $form->getData();
+
+            dump($transaction);
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->persist($transaction);
+            $entityManager->flush();
+            
+            dump($transaction);
+
+            if ($isXmlHttpRequest) {
+                return new JsonResponse([
+                    'success' => true,
+                    'transaction' => $transaction->getJsonData(),
+                    'template' => $this->renderView('financial/transaction/transaction.html.twig', ['transaction' => $transaction]),
+                ]);
+            }
+        }
+
+        return $this->render('financial/transaction/form.html.twig', [
+            'isXmlHttpRequest' => $isXmlHttpRequest,
+            'form' => $form->createView(),
+        ]);
+    }
 }

@@ -1,0 +1,4 @@
+{% if transaction.category.logo %}
+    <img class="img-thumbnail" height="25px" width="25px" src="{{ asset(app_category_logo_dir ~ '/' ~ transaction.category.logo) }}">
+{% endif %}
+{% if transaction.category.parent %}{{ transaction.category.parent.name }} > {% endif %}{{ transaction.category.name }}

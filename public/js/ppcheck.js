@@ -24,7 +24,7 @@ class PPcheck {
         });
 
         check_uncheck_action.on('click', function() {
-            let uri = $(this).data('redirect');
+            let uri = $(this).data('url');
             let ids = [];
             check_uncheck_id.each(function () {
                 if ($(this).prop('checked')) {
@@ -32,6 +32,7 @@ class PPcheck {
                 }
             });
             if (ids.length && uri !== undefined) {
+                // TODO test ? &
                 let url = uri + '?ids=' + JSON.stringify(ids);
                 PPbox.redirect(url);
             }
@@ -45,7 +46,7 @@ class PPcheck {
                 }
             });
             if (ids.length) {
-                PPbox.dialog('confirm', $(this), {'ids': JSON.stringify(ids)});
+                PPbox.processInline('confirm', $(this), {'ids': JSON.stringify(ids)});
             }
         });
 
@@ -57,7 +58,7 @@ class PPcheck {
                 }
             });
             if (ids.length) {
-                PPbox.dialog('alert', $(this), {'ids': JSON.stringify(ids)});
+                PPbox.processInline('alert', $(this), {'ids': JSON.stringify(ids)});
             }
         });
     }

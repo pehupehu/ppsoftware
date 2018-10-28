@@ -96,3 +96,12 @@ $('.btn-share-submit').on('click', function(){
     allowed.prop('selected', true);
     unallowed.prop('selected', true);
 });
+
+let bindJsDatePicker = function () {
+    $('.js-datepicker').datepicker({
+        format: 'dd/mm/yy',
+        dateFormat: 'dd/mm/yy'
+    });
+};
+
+bindJsDatePicker();

@@ -146,9 +146,19 @@ financial:
             warning:
                 move: La catégorie n'a pas pu être déplacée
     transaction:
+        field:
+            date: Date
+            name: Libellé
+            type_transaction: Type de transaction
+            category: Catégorie
+            amount: Montant
         title:
             accounts: Mes comptes
             account: Mon compte
+            new: Créer une nouvelle opération
+            edit: Modifier une opération
+        action:
+            new: Créer un nouveau type d'opération
 
 generic:
     field:
@@ -190,6 +200,12 @@ generic:
         message: Êtes vous sur ?
         confirm: Oui
         cancel: Non
+    dialog_alert:
+        title: Alerte
+        close: Fermer
+    dialog:
+        submit: Valider
+        close: Fermer
     message:
         violation:
             file_headers: L'entête doit contenir les champs file_headers_required

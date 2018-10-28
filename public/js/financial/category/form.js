@@ -18,19 +18,22 @@ function addTagForm(collectionHolder) {
 }
 
 collectionHolder.on('click', '.del-children', function () {
-    let that = $(this);
+    let that = $(this),
+        options = {};
 
-    let button1 = {
+    options.buttons = {
+        0: {
             text: Translator.trans('generic.diag_confirm.confirm'),
             callback: true,
             click: function () {
                 that.parents('.row-children').remove();
-                PPbox._closeDialog('removeChilren');
+                PPbox.close('removeChilren');
             }
         },
-        button2 = {
+        1: {
             text: Translator.trans('generic.diag_confirm.cancel'),
-        };
-    
-    PPbox.confirm('removeChilren', Translator.trans('generic.diag_confirm.title'), Translator.trans('generic.diag_confirm.message'), 'warning', 'sm', button1, button2);
+        }
+    };
+
+    PPbox.confirm('removeChilren', Translator.trans('generic.diag_confirm.title'), Translator.trans('generic.diag_confirm.message'), options);
 });

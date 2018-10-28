@@ -7,13 +7,13 @@
 {% block container %}
 
     <nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <div class="nav nav-tabs" role="tablist">
             {% for year in years %}
                 <a class="nav-item nav-link active" id="tab-{{ year }}-link" data-toggle="tab" href="#nav-{{ year }}" role="tab" aria-controls="nav-{{ year }}" aria-selected="true">{{ year }}</a>
             {% endfor %}
         </div>
     </nav>
-    <div class="tab-content" id="nav-tabContent">
+    <div class="tab-content" id="tab-transaction">
         {% for year in years %}
             <div class="tab-pane fade show active" id="tab-{{ year }}" data-account="{{ account.id }}" data-year="{{ year }}" role="tabpanel" aria-labelledby="nav-{{ year }}-tab">
             </div>

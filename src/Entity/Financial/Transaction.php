@@ -355,4 +355,14 @@ class Transaction
         $this->tickDate = $tickDate;
         return $this;
     }
+
+    public function getJsonData()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'year' => $this->date->format('Y'),
+            'yearsday' => $this->date->format('z'),
+        ];
+    }
 }

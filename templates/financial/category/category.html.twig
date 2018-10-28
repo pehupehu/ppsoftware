@@ -13,13 +13,11 @@
                             </a>
                             {% if category.canBeRemove %}
                                 <a class="text-white ppboxconfirm" href="#"
-                                        data-ppbox-id="{{ 'dialogRemove' }}"
-                                        data-ppbox-theme="danger"
-                                        data-ppbox-width="sm"
-                                        data-ppbox-title="{{ 'generic.diag_confirm.title'|trans }}"
-                                        data-ppbox-body="{{ 'generic.diag_confirm.message'|trans }}"
-                                        data-ppbox-button1="{{ {text: 'generic.diag_confirm.confirm'|trans, redirect: path('financial_category_remove', {'id': category.id}) }|json_encode() }}"
-                                        data-ppbox-button2="{{ {text: 'generic.diag_confirm.cancel'|trans }|json_encode() }}"
+                                    data-ppbox-id="{{ 'dialogRemove' }}"
+                                    data-ppbox-buttons="{{ {
+                                        0: {text: 'generic.diag_confirm.confirm'|trans, url: path('financial_category_remove', {'id': category.id})},
+                                        1: {text: 'generic.diag_confirm.cancel'|trans}
+                                    }|json_encode() }}"
                                 >
                                     <span class="oi oi-trash"></span>
                                 </a>

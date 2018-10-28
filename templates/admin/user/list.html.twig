@@ -36,34 +36,28 @@
                     <div class="dropdown-menu">
                         <a class="dropdown-item pp-check-uncheck-action-confirm"
                            data-ppbox-id="{{ 'dialogActionEnable' }}"
-                           data-ppbox-theme="danger"
-                           data-ppbox-width="sm"
-                           data-ppbox-title="{{ 'generic.diag_confirm.title'|trans }}"
-                           data-ppbox-body="{{ 'generic.diag_confirm.message'|trans }}"
-                           data-ppbox-button1="{{ {text: 'generic.diag_confirm.confirm'|trans, route: 'admin_user_action', route_params: {'action': 'enable'} }|json_encode() }}"
-                           data-ppbox-button2="{{ {text: 'generic.diag_confirm.cancel'|trans }|json_encode() }}"
+                           data-ppbox-buttons="{{ {
+                               0: {text: 'generic.diag_confirm.confirm'|trans, route: 'admin_user_action', route_params: {'action': 'enable'}},
+                               1: {text: 'generic.diag_confirm.cancel'|trans}
+                           }|json_encode() }}"
                         >
                             {{ 'generic.action.enable'|trans }}
                         </a>
                         <a class="dropdown-item pp-check-uncheck-action-confirm"
                            data-ppbox-id="{{ 'dialogActionDisable' }}"
-                           data-ppbox-theme="danger"
-                           data-ppbox-width="sm"
-                           data-ppbox-title="{{ 'generic.diag_confirm.title'|trans }}"
-                           data-ppbox-body="{{ 'generic.diag_confirm.message'|trans }}"
-                           data-ppbox-button1="{{ {text: 'generic.diag_confirm.confirm'|trans, route: 'admin_user_action', route_params: {'action': 'disable'} }|json_encode() }}"
-                           data-ppbox-button2="{{ {text: 'generic.diag_confirm.cancel'|trans }|json_encode() }}"
+                           data-ppbox-buttons="{{ {
+                               0: {text: 'generic.diag_confirm.confirm'|trans, route: 'admin_user_action', route_params: {'action': 'disable'}},
+                               1: {text: 'generic.diag_confirm.cancel'|trans}
+                           }|json_encode() }}"
                         >
                             {{ 'generic.action.disable'|trans }}
                         </a>
                         <a class="dropdown-item pp-check-uncheck-action-confirm"
                            data-ppbox-id="{{ 'dialogActionRemove' }}"
-                           data-ppbox-theme="danger"
-                           data-ppbox-width="sm"
-                           data-ppbox-title="{{ 'generic.diag_confirm.title'|trans }}"
-                           data-ppbox-body="{{ 'generic.diag_confirm.message'|trans }}"
-                           data-ppbox-button1="{{ {text: 'generic.diag_confirm.confirm'|trans, route: 'admin_user_action', route_params: {'action': 'remove'} }|json_encode() }}"
-                           data-ppbox-button2="{{ {text: 'generic.diag_confirm.cancel'|trans }|json_encode() }}"
+                           data-ppbox-buttons="{{ {
+                               0: {text: 'generic.diag_confirm.confirm'|trans, route: 'admin_user_action', route_params: {'action': 'remove'}},
+                               1: {text: 'generic.diag_confirm.cancel'|trans}
+                           }|json_encode() }}"
                         >
                             {{ 'generic.action.remove'|trans }}
                         </a>
@@ -136,24 +130,22 @@
                                 <button type="button" class="btn btn-sm btn-outline-secondary ppboxconfirm"
                                    data-ppbox-id="{{ 'dialogEnable' ~ key }}"
                                    data-ppbox-theme="info"
-                                   data-ppbox-width="sm"
-                                   data-ppbox-title="{{ 'generic.diag_confirm.title'|trans }}"
-                                   data-ppbox-body="{{ 'generic.diag_confirm.message'|trans }}"
-                                   data-ppbox-button1="{{ {text: 'generic.diag_confirm.confirm'|trans, redirect: path('admin_user_enable', {'id': user.id}) }|json_encode() }}"
-                                   data-ppbox-button2="{{ {text: 'generic.diag_confirm.cancel'|trans }|json_encode() }}"
+                                   data-ppbox-buttons="{{ {
+                                       0: {text: 'generic.diag_confirm.confirm'|trans, url: path('admin_user_enable', {'id': user.id})},
+                                       1: {text: 'generic.diag_confirm.cancel'|trans}
+                                   }|json_encode() }}"
                                 >
                                     <span class="oi oi-thumb-up"></span> {{ 'generic.action.enable'|trans }}
                                 </button>
                             {% endif %}
                             {% if user.canBeDisable %}
                                 <button type="button" class="btn btn-sm btn-outline-secondary ppboxconfirm"
-                                        data-ppbox-id="{{ 'dialogDisable' ~ key }}"
-                                        data-ppbox-theme="warning"
-                                        data-ppbox-width="sm"
-                                        data-ppbox-title="{{ 'generic.diag_confirm.title'|trans }}"
-                                        data-ppbox-body="{{ 'generic.diag_confirm.message'|trans }}"
-                                        data-ppbox-button1="{{ {text: 'generic.diag_confirm.confirm'|trans, redirect: path('admin_user_disable', {'id': user.id}) }|json_encode() }}"
-                                        data-ppbox-button2="{{ {text: 'generic.diag_confirm.cancel'|trans }|json_encode() }}"
+                                    data-ppbox-id="{{ 'dialogDisable' ~ key }}"
+                                    data-ppbox-theme="warning"
+                                    data-ppbox-buttons="{{ {
+                                        0: {text: 'generic.diag_confirm.confirm'|trans, url: path('admin_user_disable', {'id': user.id})},
+                                        1: {text: 'generic.diag_confirm.cancel'|trans}
+                                    }|json_encode() }}"
                                 >
                                     <span class="oi oi-thumb-down"></span> {{ 'generic.action.disable'|trans }}
                                 </button>
@@ -162,11 +154,10 @@
                                 <button type="button" class="btn btn-sm btn-outline-danger ppboxconfirm"
                                     data-ppbox-id="{{ 'dialogRemove' ~ key }}"
                                     data-ppbox-theme="danger"
-                                    data-ppbox-width="sm"
-                                    data-ppbox-title="{{ 'generic.diag_confirm.title'|trans }}"
-                                    data-ppbox-body="{{ 'generic.diag_confirm.message'|trans }}"
-                                    data-ppbox-button1="{{ {text: 'generic.diag_confirm.confirm'|trans, redirect: path('admin_user_remove', {'id': user.id}) }|json_encode() }}"
-                                    data-ppbox-button2="{{ {text: 'generic.diag_confirm.cancel'|trans }|json_encode() }}"
+                                    data-ppbox-buttons="{{ {
+                                        0: {text: 'generic.diag_confirm.confirm'|trans, url: path('admin_user_remove', {'id': user.id})},
+                                        1: {text: 'generic.diag_confirm.cancel'|trans}
+                                    }|json_encode() }}"
                                 >
                                     <span class="oi oi-trash"></span> {{ 'generic.action.remove'|trans }}
                                 </button>
@@ -185,11 +176,10 @@
                                         <a class="dropdown-item ppboxconfirm" href="#"
                                            data-ppbox-id="{{ 'dialogEnable' ~ key }}"
                                            data-ppbox-theme="info"
-                                           data-ppbox-width="sm"
-                                           data-ppbox-title="{{ 'generic.diag_confirm.title'|trans }}"
-                                           data-ppbox-body="{{ 'generic.diag_confirm.message'|trans }}"
-                                           data-ppbox-button1="{{ {text: 'generic.diag_confirm.confirm'|trans, redirect: path('admin_user_enable', {'id': user.id}) }|json_encode() }}"
-                                           data-ppbox-button2="{{ {text: 'generic.diag_confirm.cancel'|trans }|json_encode() }}"
+                                           data-ppbox-buttons="{{ {
+                                               0: {text: 'generic.diag_confirm.confirm'|trans, url: path('admin_user_enable', {'id': user.id})},
+                                               1: {text: 'generic.diag_confirm.cancel'|trans}
+                                           }|json_encode() }}"
                                         >
                                             <span class="oi oi-thumb-up"></span> {{ 'generic.action.enable'|trans }}
                                         </a>
@@ -198,11 +188,10 @@
                                         <a class="dropdown-item ppboxconfirm" href="#"
                                            data-ppbox-id="{{ 'dialogDisable' ~ key }}"
                                            data-ppbox-theme="warning"
-                                           data-ppbox-width="sm"
-                                           data-ppbox-title="{{ 'generic.diag_confirm.title'|trans }}"
-                                           data-ppbox-body="{{ 'generic.diag_confirm.message'|trans }}"
-                                           data-ppbox-button1="{{ {text: 'generic.diag_confirm.confirm'|trans, redirect: path('admin_user_disable', {'id': user.id}) }|json_encode() }}"
-                                           data-ppbox-button2="{{ {text: 'generic.diag_confirm.cancel'|trans }|json_encode() }}"
+                                           data-ppbox-buttons="{{ {
+                                               0: {text: 'generic.diag_confirm.confirm'|trans, url: path('admin_user_disable', {'id': user.id})},
+                                               1: {text: 'generic.diag_confirm.cancel'|trans}
+                                           }|json_encode() }}"
                                         >
                                             <span class="oi oi-thumb-down"></span> {{ 'generic.action.disable'|trans }}
                                         </a>
@@ -211,11 +200,10 @@
                                         <a class="dropdown-item ppboxconfirm" href="#"
                                             data-ppbox-id="{{ 'dialogRemove' ~ key }}"
                                             data-ppbox-theme="danger"
-                                            data-ppbox-width="sm"
-                                            data-ppbox-title="{{ 'generic.diag_confirm.title'|trans }}"
-                                            data-ppbox-body="{{ 'generic.diag_confirm.message'|trans }}"
-                                            data-ppbox-button1="{{ {text: 'generic.diag_confirm.confirm'|trans, redirect: path('admin_user_remove', {'id': user.id}) }|json_encode() }}"
-                                            data-ppbox-button2="{{ {text: 'generic.diag_confirm.cancel'|trans }|json_encode() }}"
+                                            data-ppbox-buttons="{{ {
+                                                0: {text: 'generic.diag_confirm.confirm'|trans, url: path('admin_user_remove', {'id': user.id})},
+                                                1: {text: 'generic.diag_confirm.cancel'|trans}
+                                            }|json_encode() }}"
                                         >
                                             <span class="oi oi-trash"></span> {{ 'generic.action.remove'|trans }}
                                         </a>

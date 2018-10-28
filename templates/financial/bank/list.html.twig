@@ -26,11 +26,6 @@
                 <table class="table table-hover table-listing">
                     <thead class="thead-dark">
                     <tr>
-                        <th class="text-center">
-                            <div class="form-check form-check-inline">
-                                <input type="checkbox" class="form-check-input pp-check-uncheck-all" data-check="{{ 'generic.checkboxes.check_all'|trans }}" data-uncheck="{{ 'generic.checkboxes.uncheck_all'|trans }}" title="">
-                            </div>
-                        </th>
                         <th></th>
                         <th class="text-center d-md-table-cell" scope="col">{{ 'financial.bank.field.name'|trans }}</th>
                         <th class="text-center d-none d-md-table-cell" scope="col">{{ 'financial.bank.field.surname'|trans }}</th>
@@ -39,12 +34,7 @@
                     </thead>
                     <tbody>
                     {% for key, bank in pager.iterator %}
-                    <tr class="pp-check-uncheck-row">
-                        <td class="text-center">
-                            <div class="form-check form-check-inline">
-                                <input type="checkbox" class="form-check-input pp-check-uncheck-id" data-id="{{ bank.id }}" title="">
-                            </div>
-                        </td>
+                    <tr>
                         <td class="text-center d-md-table-cell">
                             {% if bank.logo %}
                                 <img class="img-thumbnail" height="25px" width="25px" src="{{ asset(app_bank_logo_dir ~ '/' ~ bank.logo) }}">
@@ -63,12 +53,10 @@
                             {% if bank.canBeRemove %}
                                 <button type="button" class="btn btn-sm btn-outline-danger ppboxconfirm"
                                     data-ppbox-id="{{ 'dialogRemove' ~ key }}"
-                                    data-ppbox-theme="danger"
-                                    data-ppbox-width="sm"
-                                    data-ppbox-title="{{ 'generic.diag_confirm.title'|trans }}"
-                                    data-ppbox-body="{{ 'generic.diag_confirm.message'|trans }}"
-                                    data-ppbox-button1="{{ {text: 'generic.diag_confirm.confirm'|trans, redirect: path('financial_bank_remove', {'id': bank.id}) }|json_encode() }}"
-                                    data-ppbox-button2="{{ {text: 'generic.diag_confirm.cancel'|trans }|json_encode() }}"
+                                    data-ppbox-buttons="{{ {
+                                        0: {text: 'generic.diag_confirm.confirm'|trans, url: path('financial_bank_remove', {'id': bank.id})},
+                                        1: {text: 'generic.diag_confirm.cancel'|trans}
+                                    }|json_encode() }}"
                                 >
                                     <span class="oi oi-trash"></span> {{ 'generic.action.remove'|trans }}
                                 </button>
@@ -86,12 +74,10 @@
                                     {% if bank.canBeRemove %}
                                         <a class="dropdown-item ppboxconfirm" href="#"
                                             data-ppbox-id="{{ 'dialogRemove' ~ key }}"
-                                            data-ppbox-theme="danger"
-                                            data-ppbox-width="sm"
-                                            data-ppbox-title="{{ 'generic.diag_confirm.title'|trans }}"
-                                            data-ppbox-body="{{ 'generic.diag_confirm.message'|trans }}"
-                                            data-ppbox-button1="{{ {text: 'generic.diag_confirm.confirm'|trans, redirect: path('financial_bank_remove', {'id': bank.id}) }|json_encode() }}"
-                                            data-ppbox-button2="{{ {text: 'generic.diag_confirm.cancel'|trans }|json_encode() }}"
+                                            data-ppbox-buttons="{{ {
+                                                0: {text: 'generic.diag_confirm.confirm'|trans, url: path('financial_bank_remove', {'id': bank.id})},
+                                                1: {text: 'generic.diag_confirm.cancel'|trans}
+                                            }|json_encode() }}"
                                         >
                                             <span class="oi oi-trash"></span> {{ 'generic.action.remove'|trans }}
                                         </a>
