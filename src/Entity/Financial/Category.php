@@ -145,7 +145,7 @@ class Category
      */
     public function getLogo()
     {
-        return $this->logo;
+        return $this->logo ?? '';
     }
 
     /**

@@ -104,4 +104,15 @@ let bindJsDatePicker = function () {
     });
 };
 
-bindJsDatePicker();
+let bindFormCheckThumb = function () {
+    $('.form-check-thumb').on('click', function () {
+        $(this).parents('.form-check-item').find('.form-check-input').trigger('click');
+    });
+};
+
+let bind = function () {
+    bindFormCheckThumb();
+    bindJsDatePicker();
+};
+
+bind();

@@ -6,10 +6,12 @@ use App\Entity\Financial\Category;
 use App\Entity\Financial\Transaction;
 use App\Entity\Financial\TypeOfTransaction;
 use App\Form\HideButtonsType;
+use App\Form\EntityThumbType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -38,6 +40,9 @@ class TransactionType extends HideButtonsType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Transaction $transaction */
+        $transaction = $builder->getData();
+
         $builder
             ->add('name', null, [
                 'required' => true,
@@ -47,17 +52,21 @@ class TransactionType extends HideButtonsType
                 'format' => 'dd/MM/yyyy',
                 'widget' => 'single_text',
             ])
-            ->add('amount', null, [
+            ->add('amount', MoneyType::class, [
                 'required' => true,
+                'currency' => $transaction->getAccount()->getBalanceCurrency(),
             ])
-            ->add('typeOfTransaction', EntityType::class, [
+            ->add('typeOfTransaction', EntityThumbType::class, [
+                'expanded' => true,
                 'class' => TypeOfTransaction::class,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('t')
+                        ->select('t')
                         ->orderBy('t.name', 'ASC');
                 },
                 'choice_value' => 'id',
                 'choice_label' => 'name',
+                'choice_thumb' => 'logo',
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,

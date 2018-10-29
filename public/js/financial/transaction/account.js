@@ -23,8 +23,8 @@ let editTransaction = function (node) {
         url = Routing.generate('financial_transaction_edit', {'id': id}),
         options = {};
 
-    $('.transaction-row').removeClass('transaction-edit border-dark');
-    node.addClass('transaction-edit border-dark');
+    $('.transaction-row').removeClass('transaction-edit');
+    node.addClass('transaction-edit');
 
     options.theme = 'dark';
     options.width = '95%';
@@ -47,7 +47,7 @@ let editTransaction = function (node) {
     PPbox.form('transaction', Translator.trans('financial.transaction.title.edit'), url, null, options);
 
     $('#ppboxtransaction').on('dialogclose', function( event, ui ) {
-        node.removeClass('transaction-edit border-dark');
+        node.removeClass('transaction-edit');
     });
 };
 

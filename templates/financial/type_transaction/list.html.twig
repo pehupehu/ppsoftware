@@ -26,6 +26,7 @@
                 <table class="table table-hover table-listing">
                     <thead class="thead-dark">
                     <tr>
+                        <th></th>
                         <th class="text-center d-md-table-cell" scope="col">{{ 'financial.type_transaction.field.name'|trans }}</th>
                         <th class="text-center d-none d-md-table-cell" scope="col">{{ 'financial.type_transaction.field.surname'|trans }}</th>
                         <th class="text-center" scope="col">{{ 'generic.field.actions'|trans }}</th>
@@ -34,6 +35,11 @@
                     <tbody>
                     {% for key, type_transaction in pager.iterator %}
                     <tr>
+                        <td class="text-center d-md-table-cell">
+                            {% if type_transaction.logo %}
+                                <img class="img-thumbnail" height="25px" width="25px" src="{{ asset(app_type_transaction_logo_dir ~ '/' ~ type_transaction.logo) }}">
+                            {% endif %}
+                        </td>
                         <td class="text-center d-md-table-cell">
                             {{ type_transaction.name }}
                         </td>

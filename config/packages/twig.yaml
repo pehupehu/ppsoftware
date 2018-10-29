@@ -4,6 +4,8 @@ twig:
     strict_variables: '%kernel.debug%'
     form_themes:
         - 'bootstrap_4_layout.html.twig'
+        - 'form/fields.html.twig'
     globals:
         app_bank_logo_dir: '%app.bank_logo_dir%'
         app_category_logo_dir: '%app.category_logo_dir%'
+        app_type_transaction_logo_dir: '%app.type_transaction_logo_dir%'

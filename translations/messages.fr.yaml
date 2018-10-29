@@ -149,7 +149,7 @@ financial:
         field:
             date: Date
             name: Libellé
-            type_transaction: Type de transaction
+            type_transaction: Type d'opération
             category: Catégorie
             amount: Montant
         title:

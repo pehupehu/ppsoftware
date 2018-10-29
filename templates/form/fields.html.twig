@@ -1,0 +1,24 @@
+
+{% block form_thumb %}
+    {{ dump('jiadjiaj') }}
+{% endblock %}
+
+{% block entitythumb_widget %}
+    {% spaceless %}
+        {% if expanded %}
+            <ul class="nav nav-thumbnail" {{ block('widget_container_attributes') }}>
+                {% for child in form %}
+                    <li class="nav-item">
+                        <div class="text-center form-check-item">
+                            <img src="{% if child.vars.thumb is defined %}{{ asset(app_type_transaction_logo_dir ~ '/' ~ child.vars.thumb) }}{% endif %}" alt="" class="img-thumbnail form-check-thumb">
+                            {{ form_widget(child) }}
+                            {{ form_label(child) }}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            {{ block('choice_widget') }}
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}

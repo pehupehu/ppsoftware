@@ -8,6 +8,8 @@ use App\Repository\Financial\TypeOfTransactionRepository;
 use App\Tools\FlashBagTranslator;
 use App\Tools\Pager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -52,12 +54,34 @@ class TypeOfTransactionController extends AbstractController
         $typeOfTransaction->setId(0);
         $typeOfTransaction->setName('');
         $typeOfTransaction->setSurname('');
+        $typeOfTransaction->setLogo('');
 
         $form = $this->createForm(TypeOfTransactionType::class, $typeOfTransaction);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var TypeOfTransaction $typeOfTransaction */
             $typeOfTransaction = $form->getData();
+
+            /** @var UploadedFile $file */
+            $file = $form['file']->getData();
+            if ($form['remove_file']->getNormData()) {
+                $typeOfTransaction->setLogo('');
+            } elseif ($file) {
+                $fileName = strtolower($typeOfTransaction->getSurname()) . '.' . $file->guessExtension();
+
+                try {
+                    $file->move(
+                        $this->getParameter('app.public_dir') . DIRECTORY_SEPARATOR . $this->getParameter('app.type_transaction_logo_dir'),
+                        $fileName
+                    );
+
+                    $typeOfTransaction->setLogo($fileName);
+                } catch (FileException $e) {
+                    $flashBagTranslator->add('warning', 'financial.type_transaction.message.warning.new');
+
+                    return $this->redirectToRoute('financial_bank');
+                }
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($typeOfTransaction);
@@ -89,6 +113,27 @@ class TypeOfTransactionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var TypeOfTransaction $typeOfTransaction */
             $typeOfTransaction = $form->getData();
+
+            /** @var UploadedFile $file */
+            $file = $form['file']->getData();
+            if ($form['remove_file']->getNormData()) {
+                $typeOfTransaction->setLogo('');
+            } elseif ($file) {
+                $fileName = strtolower($typeOfTransaction->getSurname()) . '.' . $file->guessExtension();
+
+                try {
+                    $file->move(
+                        $this->getParameter('app.public_dir') . DIRECTORY_SEPARATOR . $this->getParameter('app.type_transaction_logo_dir'),
+                        $fileName
+                    );
+
+                    $typeOfTransaction->setLogo($fileName);
+                } catch (FileException $e) {
+                    $flashBagTranslator->add('warning', 'financial.type_transaction.message.warning.edit');
+
+                    return $this->redirectToRoute('financial_bank');
+                }
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($typeOfTransaction);

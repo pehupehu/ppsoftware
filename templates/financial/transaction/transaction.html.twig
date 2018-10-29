@@ -12,7 +12,7 @@
             {% include 'financial/transaction/_category.html.twig' with {'transaction': transaction} %}
         </div>
         <div class="d-none d-md-table-cell col-md-2 col-lg-2 col-xl-3">
-            {{ transaction.typeOfTransaction.name }}
+            {% include 'financial/transaction/_typetransaction.html.twig' with {'transaction': transaction} %}
         </div>
         <div class="col-12 col-sm-12 d-md-none">
             {% include 'financial/transaction/_category.html.twig' with {'transaction': transaction} %}

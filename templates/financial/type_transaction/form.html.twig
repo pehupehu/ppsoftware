@@ -9,12 +9,51 @@
     <div class="card">
         <div class="card-body">
             {{ form_start(form) }}
-                {{ form_row(form.name, {
-                    'label': 'financial.type_transaction.field.name'
-                }) }}
-                {{ form_row(form.surname, {
-                    'label': 'financial.type_transaction.field.surname'
-                }) }}
+                <div class="form-row">
+                    <div class="img-preview-row col-2">
+                        <div class="card d-block">
+                            <img class="card-img border-0 img-preview img-thumbnail img-fluid"
+                                 src="{% if (form.vars.data.logo) %}{{ asset(app_type_transaction_logo_dir ~ '/' ~ form.vars.data.logo) }}{% else %}{{ asset('data/blank.png') }}{% endif %}"
+                            >
+
+                            <div class="card-img-overlay p-0">
+                                <div class="card-footer border-0 bg-transparent p-0 text-right">
+                                    <a class="text-dark img-preview-edit-file"
+                                       title="{% if (form.vars.data.logo) %}{{ 'generic.field.clic_to_modify'|trans }}{% else %}{{ 'generic.field.clic_to_add'|trans }}{% endif %}"
+                                    >
+                                        <span class="oi oi-pencil"></span>
+                                    </a>
+                                </div>
+                                <div class="card-footer border-0 bg-transparent p-0 text-right">
+                                    <a class="text-dark img-preview-remove-file">
+                                        <span class="oi oi-trash"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-none">
+                            {{ form_row(form.file, {
+                                'label': 'generic.field.logo',
+                                'attr': {
+                                    'class': 'img-preview-form-input-file'
+                                }
+                            }) }}
+                            {{ form_row(form.remove_file, {
+                                'attr': {
+                                    'class': 'img-preview-form-remove-file'
+                                }
+                            }) }}
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        {{ form_row(form.name, {
+                            'label': 'financial.type_transaction.field.name'
+                        }) }}
+                        {{ form_row(form.surname, {
+                            'label': 'financial.type_transaction.field.surname'
+                        }) }}
+                    </div>
+                </div>
                 {{ form_widget(form.back, {
                     'label': 'generic.action.back',
                     'attr': {

@@ -1,0 +1,4 @@
+{% if transaction.typeOfTransaction.logo %}
+    <img class="img-thumbnail" height="25px" width="25px" src="{{ asset(app_type_transaction_logo_dir ~ '/' ~ transaction.typeOfTransaction.logo) }}">
+{% endif %}
+{{ transaction.typeOfTransaction.name }}

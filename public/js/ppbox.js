@@ -81,7 +81,7 @@ class PPbox {
             }
 
             PPbox.dialog('form', id, title, content, options);
-            bindJsDatePicker();
+            bind();
         });
     }
 

@@ -50,6 +50,7 @@
                 <div class="form-group col-4 col-sm-2">
                     {{ form_label(form.name, 'financial.transaction.field.amount') }}
                     {{ form_widget(form.amount, {
+                        'group_class': ' input-group-sm',
                         'attr': {
                             'class': 'form-control-sm'
                         }

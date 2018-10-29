@@ -110,7 +110,7 @@ class Bank
     /**
      * @return string
      */
-    public function getLogo(): string
+    public function getLogo()
     {
         return $this->logo ?? '';
     }

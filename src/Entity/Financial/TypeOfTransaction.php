@@ -31,6 +31,12 @@ class TypeOfTransaction
     private $surname;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     */
+    private $logo;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -81,6 +87,24 @@ class TypeOfTransaction
     public function setSurname(string $surname): TypeOfTransaction
     {
         $this->surname = $surname;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogo()
+    {
+        return $this->logo ?? '';
+    }
+
+    /**
+     * @param string $logo
+     * @return TypeOfTransaction
+     */
+    public function setLogo(string $logo): TypeOfTransaction
+    {
+        $this->logo = $logo;
         return $this;
     }
 
