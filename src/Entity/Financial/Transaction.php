@@ -52,16 +52,10 @@ class Transaction
     private $name;
 
     /**
-     * @ORM\Column(type="boolean")
-     * @var bool
+     * @ORM\Column(type="string", length=10)
+     * @var string
      */
-    private $debit;
-
-    /**
-     * @ORM\Column(type="boolean")
-     * @var bool
-     */
-    private $credit;
+    private $type;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
@@ -101,6 +95,13 @@ class Transaction
      * @var \DateTime
      */
     private $tickDate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Transfer")
+     * @ORM\JoinColumn(name="transfer_id", referencedColumnName="id")
+     * @var Transfer
+     */
+    private $transfer;
 
     /**
      * @return int
@@ -195,7 +196,7 @@ class Transaction
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }
@@ -211,47 +212,61 @@ class Transaction
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isDebit(): bool
+    public function getType(): string
     {
-        return $this->debit;
+        return $this->type;
     }
 
     /**
-     * @param bool $debit
+     * @param string $type
      * @return Transaction
      */
-    public function setDebit(bool $debit): Transaction
+    public function setType(string $type): Transaction
     {
-        $this->debit = $debit;
-        $this->credit = !$debit;
+        $this->type = $type;
         return $this;
     }
 
     /**
      * @return bool
      */
-    public function isCredit(): bool
+    public function isCredit()
     {
-        return $this->credit;
+        return $this->type === Category::CREDIT;
     }
 
     /**
-     * @param bool $credit
      * @return Transaction
      */
-    public function setCredit(bool $credit): Transaction
+    public function setCredit(): Transaction
     {
-        $this->credit = $credit;
-        $this->debit = !$credit;
+        $this->type = Category::CREDIT;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDebit()
+    {
+        return $this->type === Category::DEBIT;
+    }
+
+    /**
+     * @return Transaction
+     */
+    public function setDebit(): Transaction
+    {
+        $this->type = Category::DEBIT;
         return $this;
     }
 
     /**
      * @return float
      */
-    public function getAmount(): float
+    public function getAmount()
     {
         return $this->amount;
     }
@@ -269,7 +284,7 @@ class Transaction
     /**
      * @return int
      */
-    public function getChequeNumber(): int
+    public function getChequeNumber()
     {
         return $this->cheque_number;
     }
@@ -287,7 +302,7 @@ class Transaction
     /**
      * @return TypeOfTransaction
      */
-    public function getTypeOfTransaction(): TypeOfTransaction
+    public function getTypeOfTransaction()
     {
         return $this->typeOfTransaction;
     }
@@ -305,7 +320,7 @@ class Transaction
     /**
      * @return Category
      */
-    public function getCategory(): Category
+    public function getCategory()
     {
         return $this->category;
     }
@@ -353,6 +368,24 @@ class Transaction
     public function setTickDate(\DateTime $tickDate): Transaction
     {
         $this->tickDate = $tickDate;
+        return $this;
+    }
+
+    /**
+     * @return Transfer
+     */
+    public function getTransfer()
+    {
+        return $this->transfer;
+    }
+
+    /**
+     * @param Transfer $transfer
+     * @return Transaction
+     */
+    public function setTransfer(Transfer $transfer): Transaction
+    {
+        $this->transfer = $transfer;
         return $this;
     }
 

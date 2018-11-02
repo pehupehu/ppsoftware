@@ -12,9 +12,14 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 /**
  * Class TransactionType
@@ -44,8 +49,12 @@ class TransactionType extends HideButtonsType
         $transaction = $builder->getData();
 
         $builder
-            ->add('name', null, [
+            ->add('name', TextType::class, [
                 'required' => true,
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(['min' => 3]),
+                ],
             ])
             ->add('date', DateType::class, [
                 'required' => true,
@@ -55,8 +64,13 @@ class TransactionType extends HideButtonsType
             ->add('amount', MoneyType::class, [
                 'required' => true,
                 'currency' => $transaction->getAccount()->getBalanceCurrency(),
+                'constraints' => [
+                    new GreaterThan(0),
+                ],
+                'empty_data' => 0,
             ])
             ->add('typeOfTransaction', EntityThumbType::class, [
+                'required' => true,
                 'expanded' => true,
                 'class' => TypeOfTransaction::class,
                 'query_builder' => function (EntityRepository $er) {
@@ -67,15 +81,31 @@ class TransactionType extends HideButtonsType
                 'choice_value' => 'id',
                 'choice_label' => 'name',
                 'choice_thumb' => 'logo',
+                'constraints' => [
+                    new NotNull(),
+                ],
             ])
             ->add('category', EntityType::class, [
+                'required' => true,
                 'class' => Category::class,
-                'query_builder' => function (EntityRepository $er) {
+                'query_builder' => function (EntityRepository $er) use ($transaction) {
                     return $er->createQueryBuilder('c')
-                        ->orderBy('c.name', 'ASC');
+                        ->where('c.parent IS NOT NULL')
+                        ->innerJoin('c.parent', 'p')
+                        ->where('c.type = :type')
+                        ->orderBy('p.name, c.name', 'ASC')
+                        ->setParameters([
+                            ':type' => $transaction->getType(),
+                        ]);
                 },
                 'choice_value' => 'id',
                 'choice_label' => 'name',
+                'group_by' => function (Category $category) {
+                    return $category->getParent()->getName();
+                },
+                'constraints' => [
+                    new NotNull(),
+                ],
             ]);
 
         if (empty($options['hide_back_button'])) {

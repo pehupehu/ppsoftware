@@ -20,18 +20,40 @@ class CategoryFixtures extends Fixture
      * Ref to the category surnamed CHQ
      */
     const DEPOT_CHQ_REFERENCE = 'DEPOT_CHQ';
+    /**
+     * Ref to the category surnamed TTFC
+     */
+    const TTFC_REFERENCE = 'TTFC';
+    /**
+     * Ref to the category surnamed TTTC
+     */
+    const TTTC_REFERENCE = 'TTTC';
 
     /**
      * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager)
     {
+        $parent = new Category();
+        $parent->setTtfc();
+        $parent->setName('Placement');
+        $manager->persist($parent);
+
+        $this->addReference(self::TTFC_REFERENCE, $parent);
+
+        $parent = new Category();
+        $parent->setTttc();
+        $parent->setName('Réapprovisionnement');
+        $manager->persist($parent);
+
+        $this->addReference(self::TTTC_REFERENCE, $parent);
+
         // Credit
 
         // Offre de remboursement : Hp / Karcher / Samsung
 
         $parent = new Category();
-        $parent->setCredit(true);
+        $parent->setCredit();
         $parent->setName('Offre de remboursement');
 
         $children = new Category();
@@ -58,7 +80,7 @@ class CategoryFixtures extends Fixture
         // Remboursement santé : Assurance maladie / Mutuelle
 
         $parent = new Category();
-        $parent->setCredit(true);
+        $parent->setCredit();
         $parent->setName('Remboursement santé');
 
         $children = new Category();
@@ -76,7 +98,7 @@ class CategoryFixtures extends Fixture
         // Dépôt : Chèque / Espèce
 
         $parent = new Category();
-        $parent->setCredit(true);
+        $parent->setCredit();
         $parent->setName('Dépôt');
 
         $children = new Category();
@@ -100,7 +122,7 @@ class CategoryFixtures extends Fixture
         // Supermarché : Leclerc / Auchan / Carrefour
 
         $parent = new Category();
-        $parent->setDebit(true);
+        $parent->setDebit();
         $parent->setName('Supermarché');
 
         $children = new Category();
@@ -126,7 +148,7 @@ class CategoryFixtures extends Fixture
         // Habitation : Prêt immobilier / Assurance prêt
 
         $parent = new Category();
-        $parent->setDebit(true);
+        $parent->setDebit();
         $parent->setName('Habitation');
 
         $children = new Category();

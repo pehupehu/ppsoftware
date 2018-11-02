@@ -158,7 +158,21 @@ financial:
             new: Créer une nouvelle opération
             edit: Modifier une opération
         action:
-            new: Créer un nouveau type d'opération
+            new:
+                credit: Créer un revenu
+                debit: Créer une dépense
+                transfer: Créer un transfert de compte à compte
+    transfer:
+        field:
+            account_from: Du compte
+            account_to: Vers le compte
+            date: Date
+            amount: Montant
+            transaction_from_name: Virement vers %account_to%
+            transaction_to_name: Virement de %account_from%
+        title:
+            new: Créer un transfert de compte à compte
+            edit: Modifier un transfert
 
 generic:
     field:
@@ -207,6 +221,8 @@ generic:
         submit: Valider
         close: Fermer
     message:
+        loading: Chargement en cours...
+        error: Nous sommes désolés, une erreur est survenue lors du traitement de la demande.
         violation:
             file_headers: L'entête doit contenir les champs file_headers_required
 

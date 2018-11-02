@@ -12,6 +12,11 @@ use Doctrine\ORM\PersistentCollection;
  */
 class Category
 {
+    const CREDIT = 'credit';
+    const DEBIT = 'debit';
+    const TTFC = 'ttfc';
+    const TTTC = 'tttc';
+    
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -21,16 +26,10 @@ class Category
     private $id;
 
     /**
-     * @ORM\Column(type="boolean")
-     * @var bool
+     * @ORM\Column(type="string", length=10)
+     * @var string
      */
-    private $debit;
-
-    /**
-     * @ORM\Column(type="boolean")
-     * @var bool
-     */
-    private $credit;
+    private $type;
 
     /**
      * @ORM\Column(type="string")
@@ -85,40 +84,88 @@ class Category
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isDebit(): bool
+    public function getType(): string
     {
-        return $this->debit;
+        return $this->type;
     }
 
     /**
-     * @param bool $debit
+     * @param string $type
      * @return Category
      */
-    public function setDebit(bool $debit): Category
+    public function setType(string $type): Category
     {
-        $this->debit = $debit;
-        $this->credit = !$debit;
+        $this->type = $type;
         return $this;
     }
 
     /**
      * @return bool
      */
-    public function isCredit(): bool
+    public function isCredit()
     {
-        return $this->credit;
+        return $this->type === Category::CREDIT;
     }
 
     /**
-     * @param bool $credit
      * @return Category
      */
-    public function setCredit(bool $credit): Category
+    public function setCredit(): Category
     {
-        $this->credit = $credit;
-        $this->debit = !$credit;
+        $this->type = Category::CREDIT;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDebit()
+    {
+        return $this->type === Category::DEBIT;
+    }
+
+    /**
+     * @return Category
+     */
+    public function setDebit(): Category
+    {
+        $this->type = Category::DEBIT;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTtfc()
+    {
+        return $this->type === Category::TTFC;
+    }
+
+    /**
+     * @return Category
+     */
+    public function setTtfc(): Category
+    {
+        $this->type = Category::TTFC;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTttc()
+    {
+        return $this->type === Category::TTTC;
+    }
+
+    /**
+     * @return Category
+     */
+    public function setTttc(): Category
+    {
+        $this->type = Category::TTTC;
         return $this;
     }
 
@@ -184,7 +231,7 @@ class Category
     {
         if (!$this->childrens->contains($children)) {
             $children->setParent($this);
-            $children->setDebit($this->isDebit());
+            $children->setType($this->getType());
             $this->childrens->add($children);
         }
         return $this;
@@ -211,7 +258,7 @@ class Category
     /**
      * @return Category
      */
-    public function getParent(): Category
+    public function getParent()
     {
         return $this->parent;
     }

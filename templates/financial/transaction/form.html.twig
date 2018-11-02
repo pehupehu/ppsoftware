@@ -12,70 +12,71 @@
             <div class="card-body">
     {% endif %}
 
-    <div class="small">
-        {{ form_start(form) }}
-            <div class="form-row">
-                <div class="form-group col-12 col-sm-4">
-                    {{ form_label(form.date, 'financial.transaction.field.date') }}
-                    {{ form_widget(form.date, {
-                    'attr': {
-                        'class': 'form-control-sm js-datepicker'
-                    }
-                    }) }}
-                </div>
-                <div class="form-group col-12 col-sm-8">
-                    {{ form_label(form.name, 'financial.transaction.field.name') }}
-                    {{ form_widget(form.name, {
-                        'attr': {
-                            'class': 'form-control-sm'
-                        }
-                    }) }}
-                </div>
-                <div class="form-group col-12 col-sm-4">
-                    {{ form_label(form.name, 'financial.transaction.field.type_transaction') }}
-                    {{ form_widget(form.typeOfTransaction, {
-                        'attr': {
-                            'class': 'form-control-sm'
-                        }
-                    }) }}
-                </div>
-                <div class="form-group col-8 col-sm-4">
-                    {{ form_label(form.name, 'financial.transaction.field.category') }}
-                    {{ form_widget(form.category, {
-                        'attr': {
-                            'class': 'form-control-sm'
-                        }
-                    }) }}
-                </div>
-                <div class="form-group col-4 col-sm-2">
-                    {{ form_label(form.name, 'financial.transaction.field.amount') }}
-                    {{ form_widget(form.amount, {
-                        'group_class': ' input-group-sm',
-                        'attr': {
-                            'class': 'form-control-sm'
-                        }
-                    }) }}
-                </div>
+    {{ form_start(form) }}
+        <div class="form-row">
+            <div class="form-group col-12">
+                {{ form_label(form.date, 'financial.transaction.field.date') }}
+                {{ form_widget(form.date, {
+                'attr': {
+                    'autocomplete': 'off',
+                    'class': 'form-control-sm js-datepicker'
+                }
+                }) }}
             </div>
-            {% if form.back is defined %}
-                {{ form_widget(form.back, {
-                    'label': 'generic.action.back',
+            <div class="form-group col-12">
+                {{ form_label(form.name, 'financial.transaction.field.name') }}
+                {{ form_widget(form.name, {
                     'attr': {
-                        'class': 'btn-secondary btn-sm',
-                        'onclick': ppboxRedirect(path('financial_transaction'))
+                        'autocomplete': 'off',
+                        'class': 'form-control-sm'
                     }
                 }) }}
-            {% endif %}
-            {% if form.save is defined %}
-                {{ form_widget(form.save, {
-                    'label': 'generic.action.save',
+            </div>
+            <div class="form-group col-12">
+                {{ form_label(form.typeOfTransaction, 'financial.transaction.field.type_transaction') }}
+                {{ form_widget(form.typeOfTransaction, {
                     'attr': {
-                        'class': 'btn-primary btn-sm'
+                        'class': 'form-control-sm'
                     }
                 }) }}
-            {% endif %}
-        {{ form_end(form) }}
-    </div>
+            </div>
+            <div class="form-group col-8">
+                {{ form_label(form.category, 'financial.transaction.field.category') }}
+                {{ form_widget(form.category, {
+                    'attr': {
+                        'class': 'form-control-sm'
+                    }
+                }) }}
+            </div>
+            <div class="form-group col-4">
+                {{ form_label(form.amount, 'financial.transaction.field.amount') }}
+                {{ form_widget(form.amount, {
+                    'group_class': ' input-group-sm',
+                    'attr': {
+                        'autocomplete': 'off',
+                        'class': 'form-control-sm'
+                    }
+                }) }}
+            </div>
+        </div>
+        {% if form.back is defined %}
+            {{ form_widget(form.back, {
+                'label': 'generic.action.back',
+                'attr': {
+                    'class': 'btn-secondary btn-sm',
+                    'onclick': ppboxRedirect(path('financial_transaction'))
+                }
+            }) }}
+        {% endif %}
+        {% if form.save is defined %}
+            {{ form_widget(form.save, {
+                'label': 'generic.action.save',
+                'attr': {
+                    'class': 'btn-primary btn-sm'
+                }
+            }) }}
+        {% endif %}
+    {{ form_end(form) }}
 
     {% if not isXmlHttpRequest %}
         </div>

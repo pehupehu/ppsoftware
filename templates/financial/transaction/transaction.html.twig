@@ -1,3 +1,10 @@
+<div class="transaction-row px-2 py-1 border-top border-bottom small"
+     data-id="{{ transaction.id }}"
+     data-type="{{ transaction.type }}"
+     data-transfer="{% if transaction.transfer %}{{ transaction.transfer.id }}{% endif %}"
+     data-year="{{ transaction.date|date('Y') }}"
+     data-yearsday="{{ transaction.date|date('z') }}"
+>
     <div class="row h-25">
         <div class="col-6 col-sm-6 col-md-2 col-lg-2 col-xl-1">
             {{ transaction.date|localizeddate('long', 'none', app.request.locale)  }}
@@ -40,3 +47,4 @@
             {% include 'financial/transaction/_category.html.twig' with {'transaction': transaction} %}
         </div>
     </div>
+</div>

@@ -39,7 +39,7 @@ class TransactionFixtures extends Fixture implements DependentFixtureInterface
 
         $transaction = new Transaction();
         $transaction->setCreator($admin);
-        $transaction->setCredit(true);
+        $transaction->setCredit();
         $transaction->setName('Ouverture du compte');
         $transaction->setDate(new \DateTime('2018-01-01'));
         $transaction->setAccount($ccca);
@@ -51,7 +51,7 @@ class TransactionFixtures extends Fixture implements DependentFixtureInterface
 
         $transaction = new Transaction();
         $transaction->setCreator($admin);
-        $transaction->setDebit(true);
+        $transaction->setDebit();
         $transaction->setName('Cartouche HP');
         $transaction->setDate(new \DateTime('2018-01-02'));
         $transaction->setAccount($ccca);
@@ -63,7 +63,7 @@ class TransactionFixtures extends Fixture implements DependentFixtureInterface
 
         $transaction = new Transaction();
         $transaction->setCreator($admin);
-        $transaction->setCredit(true);
+        $transaction->setCredit();
         $transaction->setName('Ouverture du compte');
         $transaction->setDate(new \DateTime('2018-01-03'));
         $transaction->setAccount($lac);

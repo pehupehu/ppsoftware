@@ -6,6 +6,21 @@
 
 {% block container %}
 
+    <nav class="navbar navbar-expand" id="navbarTransactionAction">
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-dark p-0 mx-1 transaction-new" data-account="{{ account.id }}" data-type="credit" href="#">{{ 'financial.transaction.action.new.credit'|trans }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark p-0 mx-1 transaction-new" data-account="{{ account.id }}" data-type="debit" href="#">{{ 'financial.transaction.action.new.debit'|trans }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark p-0 mx-1 transaction-new" data-account="{{ account.id }}" data-type="transfer" href="#">{{ 'financial.transaction.action.new.transfer'|trans }}</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <nav>
         <div class="nav nav-tabs" role="tablist">
             {% for year in years %}
@@ -13,7 +28,7 @@
             {% endfor %}
         </div>
     </nav>
-    <div class="tab-content" id="tab-transaction">
+    <div class="tab-content" id="tabTransaction">
         {% for year in years %}
             <div class="tab-pane fade show active" id="tab-{{ year }}" data-account="{{ account.id }}" data-year="{{ year }}" role="tabpanel" aria-labelledby="nav-{{ year }}-tab">
             </div>

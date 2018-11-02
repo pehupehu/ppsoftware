@@ -24,7 +24,7 @@ class PPbox {
         }
 
         if (content === undefined) {
-            content = Translator.trans('generic.loading.message');
+            content = Translator.trans('generic.message.loading');
         }
 
         if (this.dialogs[id] === undefined) {
@@ -36,57 +36,63 @@ class PPbox {
 
     static form(id, title, url, params, options) {
         PPbox.dialog('form', id, title);
-        $.get(url, params).done(function (content) {
-            for (let i in options.buttons) {
-                if (!options.buttons.hasOwnProperty(i)) {
-                    continue;
-                }
-                if (options.buttons[i].success === undefined) {
-                    continue;
-                }
-
-                let callback_submit = options.buttons[i].callback_submit;
-
-                options.buttons[i].click = function () {
-                    let form = $('form'),
-                        form_serialize = form.serializeArray(),
-                        form_name = form.attr('name'),
-                        regex = /([_A-Za-z]+)(\[)([_A-Za-z]+)(\])/i,
-                        field_name, correspondance, form_data = {};
-
-                    form_data[form_name] = {};
-                    for (let i in form_serialize) {
-                        if (!form_serialize.hasOwnProperty(i)) {
-                            continue;
-                        }
-                        correspondance = regex.exec(form_serialize[i]['name']);
-                        if (correspondance) {
-                            field_name = correspondance[3];
-                            form_data[form_name][field_name] = form_serialize[i]['value'];
-                        }
+        $.get(url, params)
+            .done(function (content) {
+                for (let i in options.buttons) {
+                    if (!options.buttons.hasOwnProperty(i)) {
+                        continue;
+                    }
+                    if (options.buttons[i].success === undefined) {
+                        continue;
                     }
 
-                    $.post(url, form_data).done(function (data) {
-                        if (data.success) {
-                            callback_submit(data);
-                            return;
-                        } else {
-                            PPbox.refreshContent(id, data);
+                    let callback_submit = options.buttons[i].callback_submit;
+
+                    options.buttons[i].click = function () {
+                        let form = $('form'),
+                            form_serialize = form.serializeArray(),
+                            form_name = form.attr('name'),
+                            regex = /([_A-Za-z]+)(\[)([_A-Za-z]+)(\])/i,
+                            field_name, correspondance, form_data = {};
+
+                        form_data[form_name] = {};
+                        for (let i in form_serialize) {
+                            if (!form_serialize.hasOwnProperty(i)) {
+                                continue;
+                            }
+                            correspondance = regex.exec(form_serialize[i]['name']);
+                            if (correspondance) {
+                                field_name = correspondance[3];
+                                form_data[form_name][field_name] = form_serialize[i]['value'];
+                            }
                         }
-                    });
-                };
 
-                delete options.buttons[i].callback;
-                delete options.buttons[i].callback_submit;
-            }
+                        $.post(url, form_data)
+                            .done(function (data) {
+                                if (data.success) {
+                                    callback_submit(data);
+                                    return;
+                                } else {
+                                    PPbox._refreshContent(id, data);
+                                }
+                            })
+                            .fail(function () {
+                                PPbox.dialog('error', id, Translator.trans('generic.message.error'), Translator.trans('generic.message.error'));
+                            })
+                        ;
+                    };
 
-            PPbox.dialog('form', id, title, content, options);
-            bind();
-        });
-    }
+                    delete options.buttons[i].callback;
+                    delete options.buttons[i].callback_submit;
+                }
 
-    static refreshContent(id, content) {
-        $('#ppbox' + id).html(content);
+                PPbox.dialog('form', id, title, content, options);
+                bind();
+            })
+            .fail(function () {
+                PPbox.dialog('error', id, Translator.trans('generic.message.error'), Translator.trans('generic.message.error'));
+            })
+        ;
     }
 
     static confirm(id, title, content, options) {
@@ -95,6 +101,10 @@ class PPbox {
 
     static alert(id, title, content, options) {
         this.dialog('alert', id, title, content, options);
+    }
+
+    static _refreshContent(id, content) {
+        $('#ppbox' + id).html(content);
     }
 
     static _openDialog(type, id, title, content, options) {
@@ -141,11 +151,17 @@ class PPbox {
     }
 
     static _parseOptionsClasses(type, classes, theme, size) {
+        return PPbox._getClasses(type, theme, size);
+    }
+    
+    static _getClasses(type, theme, size) {
         if (theme === undefined) {
             if (type === 'confirm') {
                 theme = 'danger';
             } else if (type === 'alert') {
                 theme = 'warning';
+            } else if (type === 'error') {
+                theme = 'danger';
             } else {
                 theme = 'default';
             }
@@ -155,15 +171,14 @@ class PPbox {
             size = 'sm';
         }
 
-        classes = {
+        return {
             "ui-dialog": ("ui-corner-all ui-dialog-" + theme + " ui-dialog-" + size),
             "ui-dialog-titlebar": ("ui-corner-all ui-dialog-titlebar-" + theme + " ui-dialog-titlebar-" + size),
         };
-
-        return classes;
     }
 
     static _parseOptionsButtons(type, id, buttons) {
+        // TODO en fonction du type il faut créer les boutons par défaut
         for (let i in buttons) {
             if (!buttons.hasOwnProperty(i)) {
                 continue;

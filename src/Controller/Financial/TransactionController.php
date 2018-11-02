@@ -137,14 +137,62 @@ class TransactionController extends AbstractController
     }
 
     /**
-     * @Route("/financial/transaction/new", name="financial_transaction_new")
+     * @Route("/financial/transaction/new/{account_id}/{type}", name="financial_transaction_new", requirements={"account_id":"\d+","type":"credit|debit"})
      *
+     * @ParamConverter("account", options={"id" = "account_id"})
+     * 
+     * @param Account $account
+     * @param string $type
      * @param Request $request
      *
      * @return Response
      */
-    public function new(Request $request): Response
+    public function new(Account $account, string $type, Request $request): Response
     {
+        $isXmlHttpRequest = $request->isXmlHttpRequest();
+
+        $options = [];
+        if ($isXmlHttpRequest) {
+            $options = ['hide_back_button' => true, 'hide_save_button' => true];
+        }
+
+        $transaction = new Transaction();
+        $transaction->setId(0);
+        $transaction->setAccount($account);
+        if ($type === 'credit') {
+            $transaction->setCredit(true);
+        } else {
+            $transaction->setDebit(true);
+        }
+        $transaction->setDate(new \DateTime());
+        $transaction->setCreatedAt(new \DateTime());
+        $transaction->setCreator($this->getUser());
+        $transaction->setAmount(0);
+
+        $form = $this->createForm(TransactionType::class, $transaction, $options);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Transaction $transaction */
+            $transaction = $form->getData();
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->persist($transaction);
+            $entityManager->flush();
+
+            if ($isXmlHttpRequest) {
+                return new JsonResponse([
+                    'success' => true,
+                    'transaction' => $transaction->getJsonData(),
+                    'template' => $this->renderView('financial/transaction/transaction.html.twig', ['transaction' => $transaction]),
+                ]);
+            }
+        }
+
+        return $this->render('financial/transaction/form.html.twig', [
+            'isXmlHttpRequest' => $isXmlHttpRequest,
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
@@ -170,14 +218,10 @@ class TransactionController extends AbstractController
             /** @var Transaction $transaction */
             $transaction = $form->getData();
 
-            dump($transaction);
-
             $entityManager = $this->getDoctrine()->getManager();
 
             $entityManager->persist($transaction);
             $entityManager->flush();
-            
-            dump($transaction);
 
             if ($isXmlHttpRequest) {
                 return new JsonResponse([

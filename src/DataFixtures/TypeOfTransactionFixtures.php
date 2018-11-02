@@ -13,6 +13,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 class TypeOfTransactionFixtures extends Fixture
 {
     /**
+     * Ref to the type surnamed VIR
+     */
+    const VIR_REFERENCE = 'VIR';
+    /**
      * Ref to the type surnamed CB
      */
     const CB_REFERENCE = 'CB';
@@ -27,8 +31,17 @@ class TypeOfTransactionFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $typeOfTransaction = new TypeOfTransaction();
+        $typeOfTransaction->setName('Virement');
+        $typeOfTransaction->setSurname('VIR');
+        $typeOfTransaction->setLogo('vir.png');
+        $manager->persist($typeOfTransaction);
+
+        $this->addReference(self::VIR_REFERENCE, $typeOfTransaction);
+
+        $typeOfTransaction = new TypeOfTransaction();
         $typeOfTransaction->setName('Carte bancaire');
         $typeOfTransaction->setSurname('CB');
+        $typeOfTransaction->setLogo('cb.png');
         $manager->persist($typeOfTransaction);
 
         $this->addReference(self::CB_REFERENCE, $typeOfTransaction);
@@ -36,6 +49,7 @@ class TypeOfTransactionFixtures extends Fixture
         $typeOfTransaction = new TypeOfTransaction();
         $typeOfTransaction->setName('Chèque');
         $typeOfTransaction->setSurname('CHQ');
+        $typeOfTransaction->setLogo('chq.png');
         $manager->persist($typeOfTransaction);
 
         $this->addReference(self::CHQ_REFERENCE, $typeOfTransaction);

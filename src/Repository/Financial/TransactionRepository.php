@@ -3,12 +3,9 @@
 namespace App\Repository\Financial;
 
 use App\Entity\Financial\Account;
-use App\Entity\Financial\Transaction;
-use Doctrine\Bundle\DoctrineBundle\Twig\DoctrineExtension;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use DoctrineExtensions\Query\Mysql\Month;
 use DoctrineExtensions\Query\Mysql\Year;
 
 /**
@@ -136,6 +133,7 @@ class TransactionRepository extends EntityRepository
             ->innerJoin('t.account', 'a')
             ->innerJoin('t.typeOfTransaction', 'tot')
             ->innerJoin('t.category', 'c')
+            ->leftJoin('t.transfer', 'tr')
             ->leftJoin('c.parent', 'p');
 
         $query
