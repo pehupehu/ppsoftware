@@ -169,7 +169,7 @@ financial:
             date: Date
             amount: Montant
             transaction_from_name: Virement vers %account_to%
-            transaction_to_name: Virement de %account_from%
+            transaction_to_name: Virement du %account_from%
         title:
             new: Créer un transfert de compte à compte
             edit: Modifier un transfert

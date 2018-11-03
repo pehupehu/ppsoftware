@@ -3,10 +3,7 @@
 namespace App\EventListener\Entity;
 
 use App\Entity\Financial\Transaction;
-use App\Entity\User;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Class TransactionListener
@@ -14,58 +11,21 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  */
 class TransactionListener
 {
-    /** @var array */
-    private $persist = array();
-    /** @var array */
-    private $update = array();
-    /** @var array */
-    private $remove = array();
-
-    /** @var TokenStorageInterface */
-    private $tokenStorage;
-
-    /** @var SessionInterface */
-    private $session;
-
-    /**
-     * UserListener constructor.
-     * @param TokenStorageInterface $tokenStorage
-     */
-    public function __construct(TokenStorageInterface $tokenStorage, SessionInterface $session)
-    {
-        $this->tokenStorage = $tokenStorage;
-        $this->session = $session;
-    }
-
     /**
      * @param LifecycleEventArgs $args
      */
     public function prePersist(LifecycleEventArgs $args)
     {
-        $entity = $args->getEntity();
+        $transaction = $args->getEntity();
 
-        if ($entity instanceof Transaction) {
-            if ($this->tokenStorage->getToken()) {
-                /** @var User $loggedUser */
-                $loggedUser = $this->tokenStorage->getToken()->getUser();
-
-                $entityManager = $args->getEntityManager();
-                $uow = $entityManager->getUnitOfWork();
-                $changes = $uow->getEntityChangeSet($entity);
-
-                dump('prePersit');
-                dump($changes);
+        if ($transaction instanceof Transaction) {
+            $current_balance = $transaction->getAccount()->getCurrentBalance();
+            if ($transaction->isCredit()) {
+                $current_balance += $transaction->getAmount();
+            } else {
+                $current_balance -= $transaction->getAmount();
             }
-        }
-    }
-
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    public function postPersist(LifecycleEventArgs $args)
-    {
-        if (count($this->persist)) {
-            dump('postPersist');
+            $transaction->getAccount()->setCurrentBalance($current_balance);
         }
     }
 
@@ -74,30 +34,22 @@ class TransactionListener
      */
     public function preUpdate(LifecycleEventArgs $args)
     {
-        $entity = $args->getEntity();
+        $transaction = $args->getEntity();
 
-        if ($entity instanceof Transaction) {
-            if ($this->tokenStorage->getToken()) {
-                /** @var User $loggedUser */
-                $loggedUser = $this->tokenStorage->getToken()->getUser();
+        if ($transaction instanceof Transaction) {
+            $entityManager = $args->getEntityManager();
+            $uow = $entityManager->getUnitOfWork();
+            $changes = $uow->getEntityChangeSet($transaction);
 
-                $entityManager = $args->getEntityManager();
-                $uow = $entityManager->getUnitOfWork();
-                $changes = $uow->getEntityChangeSet($entity);
-
-                dump('preUpdate');
-                dump($changes);
+            if (isset($changes['amount'])) {
+                $current_balance = $transaction->getAccount()->getCurrentBalance();
+                if ($transaction->isCredit()) {
+                    $current_balance += ($changes['amount'][1] - $changes['amount'][0]);
+                } else {
+                    $current_balance -= ($changes['amount'][1] - $changes['amount'][0]);
+                }
+                $transaction->getAccount()->setCurrentBalance($current_balance);
             }
-        }
-    }
-
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    public function postUpdate(LifecycleEventArgs $args)
-    {
-        if (count($this->update)) {
-            dump('postUpdate');
         }
     }
 
@@ -106,30 +58,16 @@ class TransactionListener
      */
     public function preRemove(LifecycleEventArgs $args)
     {
-        $entity = $args->getEntity();
+        $transaction = $args->getEntity();
 
-        if ($entity instanceof Transaction) {
-            if ($this->tokenStorage->getToken()) {
-                /** @var User $loggedUser */
-                $loggedUser = $this->tokenStorage->getToken()->getUser();
-
-                $entityManager = $args->getEntityManager();
-                $uow = $entityManager->getUnitOfWork();
-                $changes = $uow->getEntityChangeSet($entity);
-
-                dump('preRemove');
-                dump($changes);
+        if ($transaction instanceof Transaction) {
+            $current_balance = $transaction->getAccount()->getCurrentBalance();
+            if ($transaction->isCredit()) {
+                $current_balance -= $transaction->getAmount();
+            } else {
+                $current_balance += $transaction->getAmount();
             }
-        }
-    }
-
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    public function postRemove(LifecycleEventArgs $args)
-    {
-        if (count($this->remove)) {
-            dump('postRemove');
+            $transaction->getAccount()->setCurrentBalance($current_balance);
         }
     }
 }

@@ -160,9 +160,9 @@ class TransactionController extends AbstractController
         $transaction->setId(0);
         $transaction->setAccount($account);
         if ($type === 'credit') {
-            $transaction->setCredit(true);
+            $transaction->setCredit();
         } else {
-            $transaction->setDebit(true);
+            $transaction->setDebit();
         }
         $transaction->setDate(new \DateTime());
         $transaction->setCreatedAt(new \DateTime());

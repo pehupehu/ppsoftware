@@ -31,11 +31,10 @@ class TransferController extends AbstractController
      *
      * @param Account $accountFrom
      * @param Request $request
-     * @param TranslatorInterface $translator
      *
      * @return Response
      */
-    public function new(Account $accountFrom, Request $request, TranslatorInterface $translator): Response
+    public function new(Account $accountFrom, Request $request): Response
     {
         $isXmlHttpRequest = $request->isXmlHttpRequest();
 
@@ -53,31 +52,7 @@ class TransferController extends AbstractController
             $options = ['hide_back_button' => true, 'hide_save_button' => true];
         }
 
-        $transactionFrom = new Transaction();
-        $transactionTo = new Transaction();
-
-        $transfer = new Transfer();
-        $transfer->setAccountFrom($accountFrom);
-        $transfer->setAccountTo($accountFrom);
-        $transfer->setTransactionFrom($transactionFrom);
-        $transfer->setTransactionTo($transactionTo);
-        $transfer->setId(0);
-        $transfer->setDate(new \DateTime());
-        $transfer->setCreatedAt(new \DateTime());
-        $transfer->setCreator($this->getUser());
-        $transfer->setAmount(0);
-
-        $transactionFrom->setDebit();
-        $transactionFrom->setAccount($accountFrom);
-        $transactionFrom->setCategory($categoryFrom);
-        $transactionFrom->setTypeOfTransaction($typeOfTransaction);
-        $transactionFrom->setTransfer($transfer);
-
-        $transactionTo->setCredit();
-        $transactionTo->setAccount($accountFrom);
-        $transactionTo->setCategory($categoryTo);
-        $transactionTo->setTypeOfTransaction($typeOfTransaction);
-        $transactionTo->setTransfer($transfer);
+        $transfer = Transfer::create($this->getUser(), $accountFrom, $accountFrom, $categoryFrom, $categoryTo, $typeOfTransaction);
 
         $form = $this->createForm(TransferType::class, $transfer, $options);
         $form->handleRequest($request);
@@ -88,13 +63,9 @@ class TransferController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
 
             $transactionFrom = $transfer->getTransactionFrom();
-            $transactionFrom->setName($translator->trans('financial.transfer.field.transaction_from_name', ['%account_to%' => $transfer->getAccountTo()]));
             $transactionFrom->setAccount($transfer->getAccountFrom());
             $transactionTo = $transfer->getTransactionTo();
-            $transactionTo->setName($translator->trans('financial.transfer.field.transaction_to_name', ['%account_from%' => $transfer->getAccountFrom()]));
             $transactionTo->setAccount($transfer->getAccountTo());
-            $entityManager->persist($transactionFrom);
-            $entityManager->persist($transactionTo);
             $entityManager->persist($transfer);
             $entityManager->flush();
 
@@ -120,11 +91,10 @@ class TransferController extends AbstractController
      *
      * @param Transfer $transfer
      * @param Request $request
-     * @param TranslatorInterface $translator
      *
      * @return Response
      */
-    public function edit(Transfer $transfer, Request $request, TranslatorInterface $translator): Response
+    public function edit(Transfer $transfer, Request $request): Response
     {
         $isXmlHttpRequest = $request->isXmlHttpRequest();
 
@@ -142,13 +112,9 @@ class TransferController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
 
             $transactionFrom = $transfer->getTransactionFrom();
-            $transactionFrom->setName($translator->trans('financial.transfer.field.transaction_from_name', ['%account_to%' => $transfer->getAccountTo()]));
             $transactionFrom->setAccount($transfer->getAccountFrom());
             $transactionTo = $transfer->getTransactionTo();
-            $transactionTo->setName($translator->trans('financial.transfer.field.transaction_to_name', ['%account_from%' => $transfer->getAccountFrom()]));
             $transactionTo->setAccount($transfer->getAccountTo());
-            $entityManager->persist($transactionFrom);
-            $entityManager->persist($transactionTo);
             $entityManager->persist($transfer);
             $entityManager->flush();
 

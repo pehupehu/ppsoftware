@@ -29,10 +29,13 @@ class TransactionRepository extends EntityRepository
         $query = $this->createQueryBuilder('t');
 
         $query
-            ->addSelect('a');
+            ->addSelect('a', 'tr', 'actf', 'acto');
 
         $query
-            ->innerJoin('t.account', 'a');
+            ->innerJoin('t.account', 'a')
+            ->leftJoin('t.transfer', 'tr')
+            ->leftJoin('tr.accountFrom', 'actf')
+            ->leftJoin('tr.accountTo', 'acto');
 
         $query
             ->where('a = :account');
@@ -127,15 +130,17 @@ class TransactionRepository extends EntityRepository
         $conf->addCustomDatetimeFunction('YEAR', Year::class);
 
         $query
-            ->addSelect('a, tot, c, p');
+            ->addSelect('a, tot, c, p, tr, actf, acto');
 
         $query
             ->innerJoin('t.account', 'a')
             ->innerJoin('t.typeOfTransaction', 'tot')
             ->innerJoin('t.category', 'c')
+            ->leftJoin('c.parent', 'p')
             ->leftJoin('t.transfer', 'tr')
-            ->leftJoin('c.parent', 'p');
-
+            ->leftJoin('tr.accountFrom', 'actf')
+            ->leftJoin('tr.accountTo', 'acto');
+        
         $query
             ->where('a = :account')
             ->andWhere('YEAR(t.date) = :year');

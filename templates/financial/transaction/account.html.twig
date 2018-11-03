@@ -6,21 +6,18 @@
 
 {% block container %}
 
-    <nav class="navbar navbar-expand" id="navbarTransactionAction">
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link text-dark p-0 mx-1 transaction-new" data-account="{{ account.id }}" data-type="credit" href="#">{{ 'financial.transaction.action.new.credit'|trans }}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark p-0 mx-1 transaction-new" data-account="{{ account.id }}" data-type="debit" href="#">{{ 'financial.transaction.action.new.debit'|trans }}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark p-0 mx-1 transaction-new" data-account="{{ account.id }}" data-type="transfer" href="#">{{ 'financial.transaction.action.new.transfer'|trans }}</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <div id="navbarTransactionAction" class="btn-group" role="group">
+        <button type="button" class="btn btn-sm btn-primary transaction-new" data-account="{{ account.id }}" data-type="credit">
+            {{ 'financial.transaction.action.new.credit'|trans }}
+        </button>
+        <button type="button" class="btn btn-sm btn-primary transaction-new" data-account="{{ account.id }}" data-type="debit">
+            {{ 'financial.transaction.action.new.debit'|trans }}
+        </button>
+        <button type="button" class="btn btn-sm btn-primary transaction-new" data-account="{{ account.id }}" data-type="transfer">
+            {{ 'financial.transaction.action.new.transfer'|trans }}
+        </button>
+    </div>
+
     <nav>
         <div class="nav nav-tabs" role="tablist">
             {% for year in years %}

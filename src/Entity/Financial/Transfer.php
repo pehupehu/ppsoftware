@@ -45,7 +45,7 @@ class Transfer
     private $amount;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Transaction")
+     * @ORM\ManyToOne(targetEntity="Transaction", cascade="persist")
      * @ORM\JoinColumn(name="transaction_from", referencedColumnName="id")
      * @var Transaction
      */
@@ -59,7 +59,7 @@ class Transfer
     private $accountFrom;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Transaction")
+     * @ORM\ManyToOne(targetEntity="Transaction", cascade="persist")
      * @ORM\JoinColumn(name="transaction_to", referencedColumnName="id")
      * @var Transaction
      */
@@ -240,5 +240,46 @@ class Transfer
     {
         $this->accountTo = $accountTo;
         return $this;
+    }
+
+    /**
+     * @param User $creator
+     * @param Account $accountFrom
+     * @param Account $accountTo
+     * @param Category $categoryFrom
+     * @param Category $categoryTo
+     * @param TypeOfTransaction $typeOfTransaction
+     * @return Transfer
+     */
+    public static function create(User $creator, Account $accountFrom, Account $accountTo, Category $categoryFrom, Category $categoryTo, TypeOfTransaction $typeOfTransaction): Transfer
+    {
+        $transactionFrom = new Transaction();
+        $transactionTo = new Transaction();
+
+        $transfer = new Transfer();
+
+        $transfer->setTransactionFrom($transactionFrom);
+        $transfer->setTransactionTo($transactionTo);
+        $transfer->setId(0);
+        $transfer->setDate(new \DateTime());
+        $transfer->setAmount(0);
+        $transfer->setCreatedAt(new \DateTime());
+        $transfer->setCreator($creator);
+        $transfer->setAccountFrom($accountFrom);
+        $transfer->setAccountTo($accountTo);
+
+        $transactionFrom->setDebit();
+        $transactionFrom->setAccount($accountFrom);
+        $transactionFrom->setCategory($categoryFrom);
+        $transactionFrom->setTypeOfTransaction($typeOfTransaction);
+        $transactionFrom->setTransfer($transfer);
+
+        $transactionTo->setCredit();
+        $transactionTo->setAccount($accountTo);
+        $transactionTo->setCategory($categoryTo);
+        $transactionTo->setTypeOfTransaction($typeOfTransaction);
+        $transactionTo->setTransfer($transfer);
+        
+        return $transfer;
     }
 }

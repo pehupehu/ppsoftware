@@ -46,7 +46,9 @@
                         {% for transaction in account.getLastTransactions() %}
                             <div class="row">
                                 <div class="p-0 col-7 col-sm-8 col-md-8 col-lg-6 col-xl-9">
-                                    <label class="alert p-1 m-1">{{ transaction.name }}</label>
+                                    <label class="alert p-1 m-1">
+                                        {% include 'financial/transaction/_name.html.twig' with {'transaction': transaction} %}
+                                    </label>
                                 </div>
                                 <div class="p-0 text-right col-5 col-sm-4 col-md-4 col-lg-6 col-xl-3">
                                     {% if (transaction.isCredit) %}

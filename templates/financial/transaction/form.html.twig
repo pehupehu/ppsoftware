@@ -12,6 +12,7 @@
             <div class="card-body">
     {% endif %}
 
+    <div class="small">
     {{ form_start(form) }}
         <div class="form-row">
             <div class="form-group col-12">
@@ -77,6 +78,7 @@
             }) }}
         {% endif %}
     {{ form_end(form) }}
+    </div>
 
     {% if not isXmlHttpRequest %}
         </div>

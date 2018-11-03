@@ -1,0 +1,9 @@
+{% if transaction.transfer %}
+    {% if transaction.transfer.accountFrom == transaction.account %}
+        {{ 'financial.transfer.field.transaction_from_name'|trans({'%account_to%': transaction.transfer.accountTo}) }}
+    {% else %}
+        {{ 'financial.transfer.field.transaction_to_name'|trans({'%account_from%': transaction.transfer.accountFrom}) }}
+    {% endif %}
+{% else %}
+    {{ transaction.name }}
+{% endif %}
